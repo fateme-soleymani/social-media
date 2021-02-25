@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<form class="form-inline my-2 my-lg-0" action="{% url 'search' %}">
+<form  action="{% url 'search' %}">
     <input placeholder="" name="email">
 
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    <button  type="submit">Search</button>
     </br></br>
 </form>
 
 {% if user %}
     <ul>
         {% for u in user %}
-            <li>{{ u.first_name }} {{ u.last_name }} {{ u.user_name }}</li>
+            <li><a href="{% url 'post_list' u.id %}">{{ u.user_name }}</a></li>
         {% endfor %}
     </ul>
 {% else %}

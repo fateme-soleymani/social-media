@@ -35,8 +35,9 @@ class LoginUser(View):
     def post(self, request):
         form = LoginForm(request.POST)
         if form.is_valid():
-            return render(request, 'user/login_form.html', {'form': form, 'massage': 'Login successful'})
-        return render(request, 'user/login_form.html', {'form': form, 'massage': ''})
+            user = User.objects.get(user_name=form.cleaned_data['user_name'])
+            return render(request, 'user/my_profile.html', {'user': user})
+        return render(request, 'user/login_form.html', {'form': form})
 
 
 class Search(View):
@@ -49,9 +50,11 @@ class Search(View):
         return render(request, 'user/search.html', {'user': user})
 
 
-
-
-
 class UserList(ListView):
     model = User
     context_object_name = 'list_user'
+
+
+class UserDetail(DetailView):
+    model = User
+    context_object_name = 'profile_user'

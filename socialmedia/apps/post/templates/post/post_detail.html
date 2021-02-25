@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load custom_tags %}<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <li>{{ my_post_detail.user }}</li>
     <li>{{ my_post_detail.title }}</li>
     <li>{{ my_post_detail.content }}</li>
-    <li>{{ my_post_detail.create_date }}</li>
+    <li>{% p_age my_post_detail.created %}</li>
 </ul>
 </body>
 </html>

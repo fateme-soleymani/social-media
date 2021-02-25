@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>post list</title>
 </head>
 <body>
 <ul>
@@ -10,5 +10,6 @@
         <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
     {% endfor %}
 </ul>
+<p>Number of posts: {{ my_post_list | length }}</p>
 </body>
 </html>
