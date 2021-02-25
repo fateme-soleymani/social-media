@@ -1,10 +1,9 @@
-import hashlib
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 
 from apps.user.forms import AddUserForm, LoginForm
-from apps.user.models.post import Post
+from apps.post.models.post import Post
 from apps.user.models.user import User
 
 
@@ -17,7 +16,7 @@ class AddUser(View):
         form = AddUserForm(request.POST)
         if form.is_valid():
             validated_data = form.cleaned_data
-            hash_pass = hashlib.sha256(str(validated_data['password']).encode()).hexdigest()
+            hash_pass = validated_data['password']
             first_name = validated_data['first_name']
             last_name = validated_data['last_name']
             date_of_birth = validated_data['date_of_birth']
@@ -30,7 +29,7 @@ class AddUser(View):
 
 class LoginUser(View):
     def get(self, request):
-        form = LoginForm(request.POST)
+        form = LoginForm()
         return render(request, 'user/login_form.html', {'form': form})
 
     def post(self, request):
@@ -50,11 +49,9 @@ class Search(View):
         return render(request, 'user/search.html', {'user': user})
 
 
-class PostList(ListView):
-    model = Post
-    context_object_name = 'my_post_list'
 
 
-class PostDetail(DetailView):
-    model = Post
-    context_object_name = 'my_post_detail'
+
+class UserList(ListView):
+    model = User
+    context_object_name = 'list_user'

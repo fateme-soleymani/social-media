@@ -6,10 +6,9 @@
 </head>
 <body>
 <ul>
-
-{% for post in my_post_list %}
-   <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
-{% endfor %}
+    {% for post in my_post_list %}
+        <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
+    {% endfor %}
 </ul>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 
 
@@ -10,3 +12,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.first_name
+
+    def save(self, *args, **kwargs):
+        self.hash_pass = hashlib.sha256(str(self.hash_pass).encode()).hexdigest()
+        super(User, self).save(*args, **kwargs)
