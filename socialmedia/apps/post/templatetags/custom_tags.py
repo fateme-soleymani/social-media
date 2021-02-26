@@ -3,21 +3,22 @@ from django.utils.timezone import now
 
 register = template.Library()
 
-
+# a simple tag for showing post's age
 @register.simple_tag(name='p_age')
 def p_age(time):
-    left = now() - time
+    """
+       divide differences between post publishing hour, minute, day, month, year
+       and now.
+    """
     hour = now().hour - time.hour
     minute = now().minute - time.minute
     day = now().day - time.day
     month = now().month - time.month
     year = now().year - time.year
-    print(left)
-    print('h:', hour)
-    print('min:', minute)
-    print('d:', day)
-    print('m:', month)
-    print('y:', year)
+    """
+        Check different conditions for showing the right post age.
+        It will return a message which shows post age.
+    """
     if year == 1:
         if month < 0:
             month = month + 12
