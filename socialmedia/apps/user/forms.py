@@ -3,7 +3,7 @@ from django import forms
 from apps.user.models.user import User
 
 
-#form for register
+# form for register
 class AddUserForm(forms.Form):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
@@ -15,7 +15,7 @@ class AddUserForm(forms.Form):
     def clean(self):
         """
         check validation for form field
-        :return: cleaned data
+        :return:Appropriate error or cleaned data
         """
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
@@ -29,6 +29,7 @@ class AddUserForm(forms.Form):
             raise forms.ValidationError('Passwords must match')
         return cleaned_data
 
+
 # form for user login
 class LoginForm(forms.Form):
     user_name = forms.CharField(max_length=200)
@@ -36,8 +37,8 @@ class LoginForm(forms.Form):
 
     def clean(self):
         """
-        check
-        :return:
+        Check user registration and password authentication
+        :return:Appropriate error or cleaned data
         """
         cleaned_data = super().clean()
         email = cleaned_data.get('user_name')

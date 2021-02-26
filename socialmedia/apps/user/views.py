@@ -3,16 +3,19 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 
 from apps.user.forms import AddUserForm, LoginForm
-from apps.post.models.post import Post
 from apps.user.models.user import User
 
 
+# view for user register
 class AddUser(View):
     def get(self, request):
         form = AddUserForm()
         return render(request, 'user/user_form.html', {'form': form})
 
     def post(self, request):
+        """
+        save valid data in database(user)
+        """
         form = AddUserForm(request.POST)
         if form.is_valid():
             validated_data = form.cleaned_data
@@ -27,6 +30,7 @@ class AddUser(View):
         return render(request, 'user/user_form.html', {'form': form})
 
 
+# view for user login
 class LoginUser(View):
     def get(self, request):
         form = LoginForm()
@@ -40,6 +44,7 @@ class LoginUser(View):
         return render(request, 'user/login_form.html', {'form': form})
 
 
+# view for search for username
 class Search(View):
     def get(self, request):
         email = request.GET.get('email')

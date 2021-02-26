@@ -3,6 +3,7 @@ from django.utils.timezone import now
 
 register = template.Library()
 
+
 # a simple tag for showing post's age
 @register.simple_tag(name='p_age')
 def p_age(time):

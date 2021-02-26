@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.timezone import now
 
 
+# Automatically save post creation date
 class BaseModel(models.Model):
     created = models.DateTimeField(default=now)
 
