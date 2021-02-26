@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>my profile</title>
+</head>
+<body>
+<ul>
+    <li><a href="{% url 'post_list' user.id %}">My post</a></li>
+    <li><a href="{% url 'user_list' %}">User list</a></li>
+    <li><a href="{% url 'create_post' user.id %}">create new post</a></li>
+    <li><a href="{% url 'index'%}">logout</a></li>
+</ul>
+</body>
+</html>
