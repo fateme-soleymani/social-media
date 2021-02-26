@@ -7,12 +7,17 @@ register = template.Library()
 @register.simple_tag(name='p_age')
 def p_age(time):
     left = now() - time
-    print(left)
     hour = now().hour - time.hour
     minute = now().minute - time.minute
     day = now().day - time.day
     month = now().month - time.month
     year = now().year - time.year
+    print(left)
+    print('h:', hour)
+    print('min:', minute)
+    print('d:', day)
+    print('m:', month)
+    print('y:', year)
     if year == 1:
         if month < 0:
             month = month + 12
@@ -20,7 +25,7 @@ def p_age(time):
         elif month == 0:
             if day < 0:
                 return '11 months ago'
-            elif day == 0:
+            else:
                 return '1 year ago'
         else:
             return '1 year ago'
