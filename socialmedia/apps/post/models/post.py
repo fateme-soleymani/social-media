@@ -1,13 +1,14 @@
 from django.db import models
 
 from apps.user.models.user import User
-from common.base_model import BaseModel
+from django.utils.timezone import now
 
 
-class Post(BaseModel):
+class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created = models.DateTimeField(default=now)
 
     class Meta:
         ordering = ['-created']

@@ -3,14 +3,14 @@ from django.views.generic import DetailView
 from django.views.generic.base import View
 
 from apps.post.forms import CreatePostForm, CommentLike
-from apps.post.models import Post, Comment,Like
+from apps.post.models import Post, Comment, Like
 from apps.user.models import User
 
 
 # view for choose posts of user and send template
 class PostList(View):
-    def get(self, request, pk):
-        my_post_list = Post.objects.filter(user_id=pk)
+    def get(self, request):
+        my_post_list = Post.objects.filter(user__login_status=True)
         return render(request, 'post/post_list.html', {'my_post_list': my_post_list})
 
 
@@ -22,7 +22,7 @@ class PostDetail(DetailView):
 
 # view for form create post
 class CreatePost(View):
-    def get(self, request, pk):
+    def get(self, request):
         """
         send form(created post) to temp
         :param pk: user id
@@ -30,21 +30,20 @@ class CreatePost(View):
         form = CreatePostForm()
         return render(request, 'post/post_create.html', {'form': form})
 
-    def post(self, request, pk):
+    def post(self, request):
         """
         save form data in database
         :param pk: user id
         """
         form = CreatePostForm(request.POST)
         if form.is_valid():
-            user = User.objects.get(id=pk)
+            user = User.objects.get(login_status=True)
             validated_data = form.cleaned_data
             user_obj = Post(title=validated_data['title'],
                             content=validated_data['content'], user=user)
             user_obj.save()
             # return redirect('ok')
         return render(request, 'post/post_create.html', {'form': form})
-
 
 # class CommentLikePost(View):
 #     def get(self, request):

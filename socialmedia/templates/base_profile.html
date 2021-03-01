@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'user/my_profile.css' %}">
+</head>
+<body>
+<div class="grid-container">
+    <header class="header align-center">
+
+        <a href="{% url 'my_post_list' %}" class="link_h">My posts</a>
+        <a href="{% url 'user_list' %}" class="link_h">Search User</a>
+        <a href="{% url 'friends_post' %}" class="link_h">Home</a>
+        <a href="{% url 'create_post' %}" class="link_h">create new post</a>
+        <a href="{% url 'logout' %}" class="link_h">logout</a>
+
+    </header>
+    <aside class="sidenav">
+
+    </aside>
+    <div class="main">{% block main %}
+    {% endblock %}</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

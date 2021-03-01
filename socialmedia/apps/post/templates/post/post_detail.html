@@ -1,18 +1,13 @@
-{% load custom_tags %}<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<ul>
-    <li>{{ my_post_detail.user }}</li>
-    <li>{{ my_post_detail.title }}</li>
-    <li>{{ my_post_detail.content }}</li>
-    <li>{{ my_post_detail.created }}</li>
-    <li>{% p_age my_post_detail.created %}</li>
-    <li>likes:{% count_like my_post_detail.id %} user</li>
-    <li>comments:{% comment_post my_post_detail.id %}</li>
-</ul>
-</body>
-</html>
+{% extends 'base_profile.html' %}
+{% block main %}
+    {% load custom_tags %}
+    <ul>
+        <li>{{ my_post_detail.user }}</li>
+        <li>{{ my_post_detail.title }}</li>
+        <li>{{ my_post_detail.content }}</li>
+        <li>{{ my_post_detail.created }}</li>
+        <li>{% p_age my_post_detail.created %}</li>
+        <li>likes:{% count_like my_post_detail.id %} user</li>
+        <li>comments:{% comment_post my_post_detail.id %}</li>
+    </ul>
+{% endblock main %}

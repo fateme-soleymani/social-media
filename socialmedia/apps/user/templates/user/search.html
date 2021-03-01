@@ -1,25 +1,20 @@
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form  action="{% url 'search' %}">
-    <input placeholder="" name="email">
+{% extends 'base_profile.html' %}
+{% block main %}
+    <form action="{% url 'search' %}">
+        <input placeholder="" name="email">
 
-    <button  type="submit">Search</button>
-    </br></br>
-</form>
+        <button type="submit">Search</button>
+        </br></br>
+    </form>
 
-{% if user %}
-    <ul>
-        {% for u in user %}
-            <li>{{ u.user_name }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>There is no results</p>
-{% endif %}
-</body>
-</html>
+    {% if user %}
+        <ul>
+            {% for u in user %}
+                <li>{{ u.user_name }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There is no results</p>
+    {% endif %}
+{% endblock main %}

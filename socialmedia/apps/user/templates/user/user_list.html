@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>user list</title>
-</head>
-<body>
-<form action="{% url 'search' %}">
-    <input placeholder="" name="email">
+{% extends 'base_profile.html' %}
+{% block main %}
+    <form action="{% url 'search' %}">
+        <input placeholder="" name="email">
 
-    <button type="submit">Search</button>
-    </br></br>
-</form>
-{% for user in list_user %}
-            <li>{{ user.user_name }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
-{% endfor %}
-</body>
-</html>
+        <button type="submit">Search</button>
+        </br></br>
+    </form>
+    {% for user in user_list %}
+        <li>{{ user.user_name }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
+    {% endfor %}
+{% endblock main %}

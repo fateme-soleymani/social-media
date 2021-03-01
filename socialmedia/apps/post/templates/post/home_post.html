@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base_profile.html' %}
+{% block main %}
 {% for friend_posts  in all_friends_posts %}
     {% for post in friend_posts %}
         <ul>
@@ -12,5 +7,4 @@
         </ul>
     {% endfor %}
 {% endfor %}
-</body>
-</html>
+{% endblock main %}
