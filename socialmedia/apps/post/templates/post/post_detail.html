@@ -11,6 +11,8 @@
     <li>{{ my_post_detail.content }}</li>
     <li>{{ my_post_detail.created }}</li>
     <li>{% p_age my_post_detail.created %}</li>
+    <li>likes:{% count_like my_post_detail.id %} user</li>
+    <li>comments:{% comment_post my_post_detail.id %}</li>
 </ul>
 </body>
 </html>

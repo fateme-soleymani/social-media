@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for friend_posts  in all_friends_posts %}
+    {% for post in friend_posts %}
+        <ul>
+            <li><a href="{% url 'post_detail' post.id %}">{{ post.user }}:{{ post.title }}</a></li>
+        </ul>
+    {% endfor %}
+{% endfor %}
+</body>
+</html>

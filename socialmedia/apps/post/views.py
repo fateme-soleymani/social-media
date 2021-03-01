@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 from django.views.generic.base import View
 
-from apps.post.forms import CreatePostForm
-from apps.post.models import Post
+from apps.post.forms import CreatePostForm, CommentLike
+from apps.post.models import Post, Comment,Like
 from apps.user.models import User
 
 
@@ -44,3 +44,20 @@ class CreatePost(View):
             user_obj.save()
             # return redirect('ok')
         return render(request, 'post/post_create.html', {'form': form})
+
+
+# class CommentLikePost(View):
+#     def get(self, request):
+#         form = CommentLike()
+#         return render(request, 'post/post_detail.html', {'form': form})
+#
+#     def post(self, request, pk):
+#         form = CommentLike(request.POST)
+#         if form.is_valid():
+#             validated_data = form.cleaned_data
+#             comment_obj = Comment(text=validated_data['comment'],post_id=pk,user=validated_data['comment'])
+#
+#             like_obj = Comment(text=validated_data['comment'],)
+#
+#             # return redirect('ok')
+#         return render(request, 'post/post_detail.html', {'form': form})

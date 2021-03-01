@@ -15,7 +15,7 @@
 {% if user %}
     <ul>
         {% for u in user %}
-            <li><a href="{% url 'post_list' u.id %}">{{ u.user_name }}</a></li>
+            <li>{{ u.user_name }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a></li>
         {% endfor %}
     </ul>
 {% else %}

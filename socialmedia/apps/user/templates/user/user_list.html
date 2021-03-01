@@ -12,7 +12,7 @@
     </br></br>
 </form>
 {% for user in list_user %}
-    <li><a href="{% url 'post_list' user.id %}">{{ user.user_name }}</a></li>
+            <li>{{ user.user_name }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
 {% endfor %}
 </body>
 </html>
