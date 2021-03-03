@@ -1,0 +1,12 @@
+{% extends 'base_profile.html' %}
+{% block main %}
+    <ul>
+        {% for p in posts %}
+
+            <li><a href="{% url 'post_detail' p.id %}">{{ p.title }}</a></li>
+        {% endfor %}
+    </ul>
+    <p>Number of posts: {{ posts | length }}</p>
+
+
+{% endblock %}

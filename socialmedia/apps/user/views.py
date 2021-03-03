@@ -66,9 +66,10 @@ class UserList(View):
         return render(request, 'user/user_list.html', {'user_list': user_list})
 
 
-class UserDetail(DetailView):
-    model = User
-    context_object_name = 'profile_user'
+class UserDetail(View):
+    def get(self, request, pk):
+        posts = Post.objects.filter(user_id=pk)
+        return render(request, 'user/user_profile.html', {'posts': posts})
 
 
 class UserFollow(View):
@@ -81,12 +82,9 @@ class UserFollow(View):
 class FriendsPost(View):
     def get(self, request):
         user = User.objects.get(login_status=True)
-        print(user)
         all_friends_posts = []
-        print(user.friends.all())
         for friend in user.friends.all():
             all_friends_posts.append(Post.objects.filter(user=friend))
-        print(all_friends_posts)
         return render(request, 'post/home_post.html', {'all_friends_posts': all_friends_posts})
 
 
@@ -96,3 +94,20 @@ class LogoutUser(View):
         user.login_status = False
         user.save()
         return redirect('index')
+
+
+class Following(View):
+    def get(self, request):
+        user = User.objects.get(login_status=True)
+        following = user.friends.all()
+        return render(request, 'user/following_list.html', {'following': following})
+
+
+class Follower(View):
+    def get(self, request):
+        user = User.objects.all()
+        followers = []
+        for u in user:
+            if u.friends.filter(login_status=True):
+                followers.append(u.user_name)
+        return render(request, 'user/follower_list.html', {'followers': followers})

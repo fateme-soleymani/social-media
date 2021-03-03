@@ -1,0 +1,7 @@
+{% extends 'base_profile.html' %}
+{% block main %}
+    <h2>{{ followers | length }}</h2>
+    {% for f in followers%}
+        <li><a href="{% url 'user_detail' f.id %}">{{ f }}</a></li>
+    {% endfor %}
+{% endblock %}

@@ -1,7 +1,7 @@
 from django import template
 from django.utils.timezone import now
 
-from apps.post.models import Like, Comment
+from apps.post.models import Like, Comment, Post
 
 register = template.Library()
 
@@ -72,3 +72,4 @@ def count_like(post_id):
 def comment_post(post_id):
     my_comment = Comment.objects.filter(post=post_id)
     return {'my_comment': my_comment}
+
