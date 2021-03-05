@@ -45,18 +45,21 @@ class CreatePost(View):
             # return redirect('ok')
         return render(request, 'post/post_create.html', {'form': form})
 
-# class CommentLikePost(View):
-#     def get(self, request):
-#         form = CommentLike()
-#         return render(request, 'post/post_detail.html', {'form': form})
-#
-#     def post(self, request, pk):
-#         form = CommentLike(request.POST)
-#         if form.is_valid():
-#             validated_data = form.cleaned_data
-#             comment_obj = Comment(text=validated_data['comment'],post_id=pk,user=validated_data['comment'])
-#
-#             like_obj = Comment(text=validated_data['comment'],)
-#
-#             # return redirect('ok')
-#         return render(request, 'post/post_detail.html', {'form': form})
+
+class CommentLikePost(View):
+    def get(self, request):
+        form = CommentLike()
+        return render(request, 'post/post_detail.html', {'form': form})
+
+    def post(self, request, pk):
+        form = CommentLike(request.POST)
+        if form.is_valid():
+            validated_data = form.cleaned_data
+            user = User.objects.get(login_status=True)
+            comment_obj = Comment(text=validated_data['comment'], user=user, post_id=pk)
+            comment_obj.save()
+            message = 'your comment is added'
+            # like_obj = Like(user=user, post_id=pk)
+            # like_obj.save()
+            return render(request, 'post/post_detail.html', {'form': form, 'message': message})
+        return render(request, 'post/post_detail.html', {'form': form})
