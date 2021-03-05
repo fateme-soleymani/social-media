@@ -2,16 +2,14 @@
 {% load custom_tags %}
 {% block main %}
     <ul>
-        <li>Creator:{{ my_post_detail.user }}</li>
-        <li>Title:{{ my_post_detail.title }}</li>
-        <li>Content:{{ my_post_detail.content }}</li>
-{#        <li>{{ my_post_detail.created }}</li>#}
-        <li>Created:{% p_age my_post_detail.created %}</li>
-        <li>Likes:{% count_like my_post_detail.id %} user</li>
-        <li>Comments:{% comment_post my_post_detail.id %}</li>
+        <li>Creator:{{ post.user }}</li>
+        <li>Title:{{ post.title }}</li>
+        <li>Content:{{ post.content }}</li>
+        <li>Created:{% p_age post.created %}</li>
+        <li>Likes:{% count_like post.id %} user</li>
+        <li>Comments:{% comment_post post.id %}</li>
     </ul>
-    <button><a href="{% url 'like' my_post_detail.id %}">Like</a></button>
-{#    <button><a href="{% url 'comment' my_post_detail.id %}">Comment</a></button>#}
+    <button><a href="{% url 'like' post.id %}">Like</a></button>
 
 
     <form action="" method="post">

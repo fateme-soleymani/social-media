@@ -44,10 +44,13 @@ class LoginForm(forms.Form):
         email = cleaned_data.get('user_name')
         password = cleaned_data.get('password')
         password2 = hashlib.sha256(str(password).encode()).hexdigest()
-        if not User.objects.filter(user_name=email).exists():
-            raise forms.ValidationError("this username doesn't exist")
+        if User.objects.filter(login_status=True):
+            raise forms.ValidationError("sorry other user is login!")
         else:
-            if not User.objects.filter(user_name=email, hash_pass=password2).exists():
-                raise forms.ValidationError("pass wrong")
+            if not User.objects.filter(user_name=email).exists():
+                raise forms.ValidationError("this username doesn't exist")
             else:
-                return cleaned_data
+                if not User.objects.filter(user_name=email, hash_pass=password2).exists():
+                    raise forms.ValidationError("pass wrong")
+                else:
+                    return cleaned_data

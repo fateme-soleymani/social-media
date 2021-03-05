@@ -60,6 +60,7 @@ class Search(View):
         return render(request, 'user/search.html', {'user': user})
 
 
+# show list of user
 class UserList(View):
     def get(self, request):
         user_friends = User.objects.get(login_status=True).friends.all()
@@ -68,12 +69,14 @@ class UserList(View):
         return render(request, 'user/user_list.html', {'user_list': user_list})
 
 
+# view for show user profile
 class UserDetail(View):
     def get(self, request, pk):
         posts = Post.objects.filter(user_id=pk)
         return render(request, 'user/user_profile.html', {'posts': posts})
 
 
+# view for follow request
 class UserFollow(View):
     def get(self, request, pk):
         user = User.objects.get(login_status=True)
@@ -84,6 +87,7 @@ class UserFollow(View):
         return render(request, 'user/user_list.html', {'user_list': user_list})
 
 
+# view for  show following post in home
 class FriendsPost(View):
     def get(self, request):
         user = User.objects.get(login_status=True)
@@ -93,6 +97,7 @@ class FriendsPost(View):
         return render(request, 'post/home_post.html', {'all_friends_posts': all_friends_posts})
 
 
+# view for logout
 class LogoutUser(View):
     def get(self, request):
         user = User.objects.get(login_status=True)
@@ -101,6 +106,7 @@ class LogoutUser(View):
         return redirect('index')
 
 
+# view for show followings
 class Following(View):
     def get(self, request):
         user = User.objects.get(login_status=True)
@@ -108,6 +114,7 @@ class Following(View):
         return render(request, 'user/following_list.html', {'following': following})
 
 
+# view for show followers
 class Follower(View):
     def get(self, request):
         user = User.objects.all()

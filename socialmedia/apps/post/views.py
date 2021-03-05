@@ -15,17 +15,21 @@ class PostList(View):
 
 
 # view for detail of post
-# class PostDetail(DetailView):
-#     model = Post
-#     context_object_name = 'my_post_detail'
-
 class PostDetail(View):
     def get(self, request, pk):
+        """
+        :param pk: post id
+        :return: form for comment and object of post
+        """
         form = CommentForm()
-        my_post_detail = Post.objects.get(id=pk)
-        return render(request, 'post/post_detail.html', {'form': form, 'my_post_detail': my_post_detail})
+        post = Post.objects.get(id=pk)
+        return render(request, 'post/post_detail.html', {'form': form, 'post': post})
 
     def post(self, request, pk):
+        """
+        :param pk: post id
+        save comment
+        """
         form = CommentForm(request.POST)
         if form.is_valid():
             user = User.objects.get(login_status=True)
@@ -33,8 +37,6 @@ class PostDetail(View):
             comment_obj = Comment(text=validated_data['comment'], user=user, post_id=pk)
             comment_obj.save()
         return redirect('post_detail', pk)
-        # return render(request, 'post/post_detail.html', {'form': form, 'my_post_detail': my_post_detail})
-
 
 
 # view for form create post
@@ -59,12 +61,15 @@ class CreatePost(View):
             user_obj = Post(title=validated_data['title'],
                             content=validated_data['content'], user=user)
             user_obj.save()
-            # return redirect('ok')
         return render(request, 'post/post_create.html', {'form': form})
 
 
 class LikePost(View):
     def get(self, request, pk):
+        """
+        :param pk: post id
+        save like
+        """
         user = User.objects.get(login_status=True)
         like_obj = Like(user=user, post_id=pk)
         if Like.objects.filter(user=user, post_id=pk):
