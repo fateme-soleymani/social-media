@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.views.generic.base import View
 
-from apps.post.forms import CreatePostForm, CommentLike
+from apps.post.forms import CreatePostForm, CommentForm
 from apps.post.models import Post, Comment, Like
 from apps.user.models import User
 
@@ -15,9 +15,26 @@ class PostList(View):
 
 
 # view for detail of post
-class PostDetail(DetailView):
-    model = Post
-    context_object_name = 'my_post_detail'
+# class PostDetail(DetailView):
+#     model = Post
+#     context_object_name = 'my_post_detail'
+
+class PostDetail(View):
+    def get(self, request, pk):
+        form = CommentForm()
+        my_post_detail = Post.objects.get(id=pk)
+        return render(request, 'post/post_detail.html', {'form': form, 'my_post_detail': my_post_detail})
+
+    def post(self, request, pk):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(login_status=True)
+            validated_data = form.cleaned_data
+            comment_obj = Comment(text=validated_data['comment'], user=user, post_id=pk)
+            comment_obj.save()
+        return redirect('post_detail', pk)
+        # return render(request, 'post/post_detail.html', {'form': form, 'my_post_detail': my_post_detail})
+
 
 
 # view for form create post
@@ -46,20 +63,12 @@ class CreatePost(View):
         return render(request, 'post/post_create.html', {'form': form})
 
 
-class CommentLikePost(View):
-    def get(self, request):
-        form = CommentLike()
-        return render(request, 'post/post_detail.html', {'form': form})
-
-    def post(self, request, pk):
-        form = CommentLike(request.POST)
-        if form.is_valid():
-            validated_data = form.cleaned_data
-            user = User.objects.get(login_status=True)
-            comment_obj = Comment(text=validated_data['comment'], user=user, post_id=pk)
-            comment_obj.save()
-            message = 'your comment is added'
-            # like_obj = Like(user=user, post_id=pk)
-            # like_obj.save()
-            return render(request, 'post/post_detail.html', {'form': form, 'message': message})
-        return render(request, 'post/post_detail.html', {'form': form})
+class LikePost(View):
+    def get(self, request, pk):
+        user = User.objects.get(login_status=True)
+        like_obj = Like(user=user, post_id=pk)
+        if Like.objects.filter(user=user, post_id=pk):
+            pass
+        else:
+            like_obj.save()
+        return redirect('post_detail', pk)

@@ -7,6 +7,6 @@ class CreatePostForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea)
 
 
-class CommentLike(forms.Form):
+class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
-    like = forms.BooleanField()
+

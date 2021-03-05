@@ -10,6 +10,9 @@
         <li>Likes:{% count_like my_post_detail.id %} user</li>
         <li>Comments:{% comment_post my_post_detail.id %}</li>
     </ul>
+    <button><a href="{% url 'like' my_post_detail.id %}">Like</a></button>
+{#    <button><a href="{% url 'comment' my_post_detail.id %}">Comment</a></button>#}
+
 
     <form action="" method="post">
         {% csrf_token %}
@@ -18,8 +21,7 @@
         </table>
         <br>
         <tr>
-            <td><input type="submit" VALUE="comment"></td>
+            <td><input type="submit" VALUE="Send"></td>
         </tr>
     </form>
-    <p>{{ message }}</p>
 {% endblock main %}

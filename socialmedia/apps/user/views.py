@@ -62,7 +62,9 @@ class Search(View):
 
 class UserList(View):
     def get(self, request):
-        user_list = User.objects.exclude(login_status=True)
+        user_friends = User.objects.get(login_status=True).friends.all()
+        user_except_you = User.objects.exclude(login_status=True)
+        user_list = set(user_except_you) - set(user_friends)
         return render(request, 'user/user_list.html', {'user_list': user_list})
 
 
@@ -76,7 +78,10 @@ class UserFollow(View):
     def get(self, request, pk):
         user = User.objects.get(login_status=True)
         user.friends.add(User.objects.get(id=pk))
-        return render(request, 'user/user_list.html')
+        user_friends = User.objects.get(login_status=True).friends.all()
+        user_except_you = User.objects.exclude(login_status=True)
+        user_list = set(user_except_you) - set(user_friends)
+        return render(request, 'user/user_list.html', {'user_list': user_list})
 
 
 class FriendsPost(View):
@@ -109,5 +114,5 @@ class Follower(View):
         followers = []
         for u in user:
             if u.friends.filter(login_status=True):
-                followers.append(u.user_name)
+                followers.append(u)
         return render(request, 'user/follower_list.html', {'followers': followers})
