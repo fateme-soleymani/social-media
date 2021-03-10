@@ -7,6 +7,6 @@
         </br></br>
     </form>
     {% for user in user_list %}
-        <li>{{ user.user_name }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
+        <li>{{ user.email }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
     {% endfor %}
 {% endblock main %}

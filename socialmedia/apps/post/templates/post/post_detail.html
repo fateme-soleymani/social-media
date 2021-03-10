@@ -7,8 +7,18 @@
         <li>Content:{{ post.content }}</li>
         <li>Created:{% p_age post.created %}</li>
         <li>Likes:{% count_like post.id %} user</li>
-        <li>Comments:{% comment_post post.id %}</li>
+        {#        <li>Comments:{% comment_post post.id %}</li>#}
     </ul>
+    <ul>
+        <p>Comments:</p>
+        {% for comment in my_comment %}
+            <li>{{ comment.user.email }}:{{ comment.text }}</li>
+            {% if comment.post.user == request.user %}
+                <button><a href="{% url 'delete_cm' comment.id %}">Delete</a></button>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
     <button><a href="{% url 'like' post.id %}">Like</a></button>
 
 
@@ -22,4 +32,8 @@
             <td><input type="submit" VALUE="Send"></td>
         </tr>
     </form>
+    {% if post.user == request.user %}
+        <button><a href="{% url 'edit_post' post.id %}">Edit</a></button>
+        <button><a href="{% url 'delete_post' post.id %}">Delete</a></button>
+    {% endif %}
 {% endblock main %}

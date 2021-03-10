@@ -10,7 +10,7 @@
     {% if user %}
         <ul>
             {% for u in user %}
-                <li>{{ u.user_name }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a>
+                <li>{{ u.email }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a>
                 </li>
             {% endfor %}
         </ul>

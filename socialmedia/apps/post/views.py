@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from django.views.generic.base import View
 
 from apps.post.forms import CreatePostForm, CommentForm
@@ -10,7 +10,9 @@ from apps.user.models import User
 # view for choose posts of user and send template
 class PostList(View):
     def get(self, request):
-        my_post_list = Post.objects.filter(user__login_status=True)
+        print('hi')
+        print(type(request.user))
+        my_post_list = Post.objects.filter(user=request.user)
         return render(request, 'post/post_list.html', {'my_post_list': my_post_list})
 
 
@@ -23,7 +25,8 @@ class PostDetail(View):
         """
         form = CommentForm()
         post = Post.objects.get(id=pk)
-        return render(request, 'post/post_detail.html', {'form': form, 'post': post})
+        my_comment = Comment.objects.filter(post=pk)
+        return render(request, 'post/post_detail.html', {'form': form, 'post': post, 'my_comment': my_comment})
 
     def post(self, request, pk):
         """
@@ -32,7 +35,7 @@ class PostDetail(View):
         """
         form = CommentForm(request.POST)
         if form.is_valid():
-            user = User.objects.get(login_status=True)
+            user = request.user
             validated_data = form.cleaned_data
             comment_obj = Comment(text=validated_data['comment'], user=user, post_id=pk)
             comment_obj.save()
@@ -56,7 +59,7 @@ class CreatePost(View):
         """
         form = CreatePostForm(request.POST)
         if form.is_valid():
-            user = User.objects.get(login_status=True)
+            user = request.user
             validated_data = form.cleaned_data
             user_obj = Post(title=validated_data['title'],
                             content=validated_data['content'], user=user)
@@ -70,10 +73,24 @@ class LikePost(View):
         :param pk: post id
         save like
         """
-        user = User.objects.get(login_status=True)
+        user = request.user
         like_obj = Like(user=user, post_id=pk)
         if Like.objects.filter(user=user, post_id=pk):
             pass
         else:
             like_obj.save()
         return redirect('post_detail', pk)
+
+class UpdatePost(UpdateView):
+    model = Post
+    template_name = 'post/edit_post.html'
+    fields = ['title', 'content']
+    success_url = '/user/'
+
+class DeletePost(DeleteView):
+    model = Post
+    success_url = '/user/'
+
+class DeleteComment(DeleteView):
+    model = Comment
+    success_url = '/user/'

@@ -71,6 +71,7 @@
   <li><a href="{% url 'followers' %}">Follower</a></li>
   <li><a href="{% url 'following' %}">Following</a></li>
   <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>
+  <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>
 </ul>
 </div>
 <div class="main">

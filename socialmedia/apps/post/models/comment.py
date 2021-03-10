@@ -6,6 +6,9 @@ class Comment(models.Model):
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
     post = models.ForeignKey('post.Post', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.text
+
 
 class Like(models.Model):
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)

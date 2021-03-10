@@ -2,6 +2,11 @@
 <ul>
     {% for comment in my_comment %}
         <li>{{ comment.user }}:{{ comment.text }}</li>
+        <li>{{ comment.post.id }}</li>
+            {% if comment.post.user == request.user %}
+                <p>OK</p>
+                <button><a href="{% url 'delete_cm' comment.id %}">Delete</a></button>
+            {% endif %}
     {% endfor %}
 </ul>
 
