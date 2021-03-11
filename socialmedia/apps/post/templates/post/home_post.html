@@ -3,7 +3,7 @@
 {% for friend_posts  in all_friends_posts %}
     {% for post in friend_posts %}
         <ul>
-            <li><a href="{% url 'post_detail' post.id %}">{{ post.user }}:{{ post.title }}</a></li>
+            <li><a href="{% url 'post_detail' post.id %}">{{ post.user.email }}:{{ post.title }}</a></li>
         </ul>
     {% endfor %}
 {% endfor %}

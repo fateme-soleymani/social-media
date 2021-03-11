@@ -1,82 +1,55 @@
-{#<!DOCTYPE html>#}
-{#{% load static %}#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>{% block title %}Home{% endblock %}</title>#}
-{#    <link rel="stylesheet" href="{% static 'user/my_profile.css' %}">#}
-{#</head>#}
-{#<body>#}
-{#<div class="grid-container">#}
-{#    <header class="header align-center">#}
-{#        <a href="{% url 'my_post_list' %}" class="link_h">My posts</a>#}
-{#        <a href="{% url 'user_list' %}" class="link_h">Search User</a>#}
-{#        <a href="{% url 'friends_post' %}" class="link_h">Home</a>#}
-{#        <a href="{% url 'create_post' %}" class="link_h">create new post</a>#}
-{#        <a href="{% url 'logout' %}" class="link_h">logout</a>#}
-{#        <a href="{% url 'followers' %}" class="link_h">Follower</a>#}
-{#        <a href="{% url 'following' %}" class="link_h">Following</a>#}
-{#    </header>#}
-{#    <aside class="sidenav">#}
-{##}
-{#    </aside>#}
-{#    <div class="main">{% block main %}#}
-{#    {% endblock %}</div>#}
-{#</div>#}
-{#</body>#}
-{#</html>#}
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-.base ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #5f5d5d;
-}
+    <style>
+        .base ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #5f5d5d;
+        }
 
-.base li {
-  float: left;
-}
+        .base li {
+            float: left;
+        }
 
-.base li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
+        .base li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
 
-.base li a:hover:not(.active) {
-  background-color: #fa6060;
-}
+        .base li a:hover:not(.active) {
+            background-color: #fa6060;
+        }
 
-.base .active {
-  background-color: #fa6060;
-}
-</style>
+        .base .active {
+            background-color: #fa6060;
+        }
+    </style>
     <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
 <div class="base">
-<ul>
-  <li><a href="{% url 'my_post_list' %}">My posts</a></li>
-  <li><a href="{% url 'user_list' %}">Search User</a></li>
-  <li><a href="{% url 'friends_post' %}">Home</a></li>
-  <li><a href="{% url 'create_post' %}">create new post</a></li>
-  <li><a href="{% url 'followers' %}">Follower</a></li>
-  <li><a href="{% url 'following' %}">Following</a></li>
-  <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>
-  <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>
-</ul>
+    <ul>
+        <li><a href="{% url 'my_post_list' %}">My posts</a></li>
+        <li><a href="{% url 'user_list' %}">Search User</a></li>
+        <li><a href="{% url 'friends_post' %}">Home</a></li>
+        <li><a href="{% url 'create_post' %}">create new post</a></li>
+        <li><a href="{% url 'followers' %}">Follower</a></li>
+        <li><a href="{% url 'following' %}">Following</a></li>
+        <li><a href="{% url 'follow_requests' %}">Follow Request</a></li>
+        <li>{{ request.user.email }}</li>
+        <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>
+        <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>
+    </ul>
 </div>
 <div class="main">
-{% block main %}
-{% endblock %}
+    {% block main %}
+    {% endblock %}
 </div>
 </body>
 </html>

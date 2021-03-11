@@ -1,15 +1,12 @@
-import hashlib
-
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import View
 
 from apps.post.models import Post
-from apps.user.forms import RegisterUserForm, LoginForm
-from apps.user.models.user import User
+from apps.user.forms import RegisterUserForm
+from apps.user.models.user import User, FollowerFollowing
 
 
 # view for user register
@@ -45,8 +42,8 @@ class UserList(View):
 
 # view for show user profile
 class UserDetail(View):
-    def get(self, request, pk):
-        posts = Post.objects.filter(user_id=pk)
+    def get(self, request, slug):
+        posts = Post.objects.filter(user__slug=slug)
         return render(request, 'user/user_profile.html', {'posts': posts})
 
 
@@ -65,41 +62,48 @@ class UserFollow(View):
 class FriendsPost(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
-        all_friends_posts = []
-        for friend in user.friends.all():
-            all_friends_posts.append(Post.objects.filter(user=friend))
+        all_friends_posts = [Post.objects.filter(user=request.user)]
+        following = FollowerFollowing.objects.filter(from_user=user, accept=True)
+        for friend in following:
+            all_friends_posts.append(Post.objects.filter(user=friend.to_user))
         return render(request, 'post/home_post.html', {'all_friends_posts': all_friends_posts})
-
-
-# view for logout
-# class LogoutUser(View):
-#     def get(self, request):
-#         user = request.user
-#         user.login_status = False
-#         user.save()
-#         return redirect('index')
 
 
 # view for show followings
 class Following(View):
     def get(self, request):
         user = request.user
-        following = user.friends.all()
+        following = FollowerFollowing.objects.filter(from_user=user, accept=True)
         return render(request, 'user/following_list.html', {'following': following})
 
 
 # view for show followers
 class Follower(View):
     def get(self, request):
-        user = User.objects.all()
-        followers = []
-        for u in user:
-            if u.friends.filter(id=request.user.id):
-                followers.append(u)
+        user = request.user
+        followers = FollowerFollowing.objects.filter(to_user=user, accept=True)
         return render(request, 'user/follower_list.html', {'followers': followers})
 
+
+# view for edit user info
 class UpdateUser(UpdateView):
     model = User
     template_name = 'user/edit_user.html'
     fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio', 'password']
     success_url = '/user/'
+
+
+# view for follow request
+class FollowRequest(View):
+    def get(self, request):
+        user = request.user
+        follow_request = FollowerFollowing.objects.filter(to_user=user, accept=False)
+        return render(request, 'user/follow_request.html', {'follow_request': follow_request})
+
+
+# view for accept request
+class AcceptRequest(View):
+    def get(self, request, pk):
+        user = request.user
+        FollowerFollowing.objects.filter(to_user_id=user, from_user=pk).update(accept=True)
+        return redirect('follow_requests')

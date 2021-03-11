@@ -13,8 +13,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     email = models.EmailField("email address", unique=True, null=False)
-    friends = models.ManyToManyField('User', related_name='following')
-    # friends_request = models.ManyToManyField('User', related_name='request')
+    friends = models.ManyToManyField('User', through='FollowerFollowing')
     link = models.URLField('link', max_length=200, blank=True)
     bio = models.TextField('bio', blank=True)
     gender = models.CharField(choices=(('F', 'Female'), ('M', 'Male')), default='d', max_length=1)
@@ -42,3 +41,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.first_name
+
+
+class FollowerFollowing(models.Model):
+    from_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='from_user')
+    to_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='to_user')
+    accept = models.BooleanField(default=False)
