@@ -129,6 +129,6 @@ LOGIN_REDIRECT_URL = 'friends_post'
 
 LOGIN_URL = 'friends_post'
 
-LOGOUT_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = '/'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

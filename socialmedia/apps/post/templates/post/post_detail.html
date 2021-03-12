@@ -2,24 +2,26 @@
 {% load custom_tags %}
 {% block main %}
     <ul>
-        <li>Creator:{{ post.user }}</li>
-        <li>Title:{{ post.title }}</li>
-        <li>Content:{{ post.content }}</li>
-        <li>Created:{% p_age post.created %}</li>
-        <li>Likes:{% count_like post.id %} user</li>
-        {#        <li>Comments:{% comment_post post.id %}</li>#}
+        <li><b>{{ post.user | title }}</b> {% p_age post.created %}</li>
+        {#        <li><h3>{{ post.title }}</h3></li>#}
+        <li><h2>{{ post.content }}</h2></li>
+
+
     </ul>
+    <button class="btn_t"><i class="fa fa-comment"></i></button>
+    <button class="btn_t"><i class="fa fa-heart"></i><a
+                        href="{% url 'like' post.id %}">{% count_like post.id %}</a></button>
+
     <ul>
-        <p>Comments:</p>
+
         {% for comment in my_comment %}
             <li>{{ comment.user.email }}:{{ comment.text }}</li>
             {% if comment.post.user == request.user %}
-                <button><a href="{% url 'delete_cm' comment.id %}">Delete</a></button>
+                <button class="btn_t"><i class="fa fa-trash"></i><a href="{% url 'delete_cm' comment.id %}">Delete</a>
+                </button>
             {% endif %}
         {% endfor %}
     </ul>
-
-    <button><a href="{% url 'like' post.id %}">Like</a></button>
 
 
     <form action="" method="post">
@@ -29,11 +31,14 @@
         </table>
         <br>
         <tr>
-            <td><input type="submit" VALUE="Send"></td>
+
+            <td><input class="btn_t" type="submit" VALUE="Send"></td>
         </tr>
     </form>
+
+    <br>
     {% if post.user == request.user %}
-        <button><a href="{% url 'edit_post' post.id %}">Edit</a></button>
-        <button><a href="{% url 'delete_post' post.id %}">Delete</a></button>
+        <button class="btn_t"><i class="fa fa-edit"></i><a href="{% url 'edit_post' post.id %}">Edit</a></button>
+        <button class="btn_t"><i class="fa fa-trash"></i><a href="{% url 'delete_post' post.id %}">Delete</a></button>
     {% endif %}
 {% endblock main %}

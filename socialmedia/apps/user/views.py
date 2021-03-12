@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash, authenticate, login, logout
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, UpdateView
@@ -21,7 +23,7 @@ class RegisterUser(CreateView):
 
 
 # view for search for username
-class Search(View):
+class Search(LoginRequiredMixin, View):
     def get(self, request):
         email = request.GET.get('email')
         if email:
@@ -32,7 +34,7 @@ class Search(View):
 
 
 # show list of user
-class UserList(View):
+class UserList(LoginRequiredMixin, View):
     def get(self, request):
         user_friends = request.user.friends.all()
         user_except_you = User.objects.exclude(id=request.user.id)
@@ -41,14 +43,14 @@ class UserList(View):
 
 
 # view for show user profile
-class UserDetail(View):
+class UserDetail(LoginRequiredMixin, View):
     def get(self, request, slug):
         posts = Post.objects.filter(user__slug=slug)
         return render(request, 'user/user_profile.html', {'posts': posts})
 
 
 # view for follow request
-class UserFollow(View):
+class UserFollow(LoginRequiredMixin, View):
     def get(self, request, pk):
         user = request.user
         user.friends.add(User.objects.get(id=pk))
@@ -70,7 +72,7 @@ class FriendsPost(LoginRequiredMixin, View):
 
 
 # view for show followings
-class Following(View):
+class Following(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         following = FollowerFollowing.objects.filter(from_user=user, accept=True)
@@ -78,7 +80,7 @@ class Following(View):
 
 
 # view for show followers
-class Follower(View):
+class Follower(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         followers = FollowerFollowing.objects.filter(to_user=user, accept=True)
@@ -86,15 +88,15 @@ class Follower(View):
 
 
 # view for edit user info
-class UpdateUser(UpdateView):
+class UpdateUser(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'user/edit_user.html'
-    fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio', 'password']
+    fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio']
     success_url = '/user/'
 
 
 # view for follow request
-class FollowRequest(View):
+class FollowRequest(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         follow_request = FollowerFollowing.objects.filter(to_user=user, accept=False)
@@ -102,8 +104,53 @@ class FollowRequest(View):
 
 
 # view for accept request
-class AcceptRequest(View):
+class AcceptRequest(LoginRequiredMixin, View):
     def get(self, request, pk):
         user = request.user
         FollowerFollowing.objects.filter(to_user_id=user, from_user=pk).update(accept=True)
         return redirect('follow_requests')
+
+
+# view for changing password
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/change_password.html', {
+        'form': form
+    })
+
+
+# view for login
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'user/login.html')
+
+    def post(self, request):
+        message = ''
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        is_logout = request.POST.get("logout")
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    message = 'Login was successful!'
+                    login(request, user)
+                    return redirect('friends_post')
+                else:
+                    message = 'User is deactivated!'
+            else:
+                message = 'Username or password was wrong!'
+        elif is_logout:
+            logout(request)
+            message = 'Logout successful'
+        return render(request, 'user/login.html', {'message': message})

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.views.generic.base import View
@@ -8,16 +9,14 @@ from apps.user.models import User
 
 
 # view for choose posts of user and send template
-class PostList(View):
+class PostList(LoginRequiredMixin, View):
     def get(self, request):
-        print('hi')
-        print(type(request.user))
         my_post_list = Post.objects.filter(user=request.user)
         return render(request, 'post/post_list.html', {'my_post_list': my_post_list})
 
 
 # view for detail of post
-class PostDetail(View):
+class PostDetail(LoginRequiredMixin, View):
     def get(self, request, pk):
         """
         :param pk: post id
@@ -43,7 +42,7 @@ class PostDetail(View):
 
 
 # view for form create post
-class CreatePost(View):
+class CreatePost(LoginRequiredMixin, View):
     def get(self, request):
         """
         send form(created post) to temp
@@ -66,8 +65,8 @@ class CreatePost(View):
             user_obj.save()
         return render(request, 'post/post_create.html', {'form': form})
 
-
-class LikePost(View):
+# view for liking a post
+class LikePost(LoginRequiredMixin, View):
     def get(self, request, pk):
         """
         :param pk: post id
@@ -81,16 +80,19 @@ class LikePost(View):
             like_obj.save()
         return redirect('post_detail', pk)
 
-class UpdatePost(UpdateView):
+# view for editing a post
+class UpdatePost(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = 'post/edit_post.html'
     fields = ['title', 'content']
     success_url = '/user/'
 
-class DeletePost(DeleteView):
+# view for deleting a post
+class DeletePost(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = '/user/'
 
-class DeleteComment(DeleteView):
+# view for editing a comment
+class DeleteComment(LoginRequiredMixin, DeleteView):
     model = Comment
     success_url = '/user/'

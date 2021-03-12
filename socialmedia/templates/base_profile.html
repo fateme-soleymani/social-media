@@ -2,6 +2,10 @@
 <html>
 <head>
     <style>
+        body {
+            margin: 0;
+        }
+
         .base ul {
             list-style-type: none;
             margin: 0;
@@ -29,19 +33,45 @@
         .base .active {
             background-color: #fa6060;
         }
+
+        .main ul {
+            list-style: none;
+        }
+
+        .main li {
+            padding: 0.5em;
+        }
+
+
+        .btn {
+            border: 3px solid #fe59ee;
+            background-color: #fe59ee;
+            border-radius: 2em 2em;
+            padding: 6px;
+        }
+
+        .btn_t {
+            background-color: DodgerBlue;
+            border: none;
+            color: white;
+            padding: 12px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
     <title>{% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="base">
     <ul>
-        <li><a href="{% url 'my_post_list' %}">My posts</a></li>
+        <li><a href="{% url 'my_post_list' %}">My posts {{ my_post_list | length }}</a></li>
         <li><a href="{% url 'user_list' %}">Search User</a></li>
         <li><a href="{% url 'friends_post' %}">Home</a></li>
         <li><a href="{% url 'create_post' %}">create new post</a></li>
-        <li><a href="{% url 'followers' %}">Follower</a></li>
-        <li><a href="{% url 'following' %}">Following</a></li>
-        <li><a href="{% url 'follow_requests' %}">Follow Request</a></li>
+        <li><a href="{% url 'followers' %}">Followers {{ followers | length }}</a></li>
+        <li><a href="{% url 'following' %}">Followings {{ following | length }}</a></li>
+        <li><a href="{% url 'follow_requests' %}">Follow Requests {{ follow_request | length }}</a></li>
         <li>{{ request.user.email }}</li>
         <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>
         <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>
