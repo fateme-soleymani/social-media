@@ -1,5 +1,3 @@
-import hashlib
-
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -18,6 +16,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField('bio', blank=True)
     gender = models.CharField(choices=(('F', 'Female'), ('M', 'Male')), default='d', max_length=1)
     slug = AutoSlugField(populate_from=['email'], unique=True, )
+
+    profile_pic = models.ImageField(default='default_prof.png', null=True, blank=True)
+
     is_active = models.BooleanField(('active'), default=True)
     is_superuser = models.BooleanField(('superuser'), default=False)
     is_staff = models.BooleanField(('staff'), default=False)
@@ -42,8 +43,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.first_name
 
-
-class FollowerFollowing(models.Model):
-    from_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='from_user')
-    to_user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='to_user')
-    accept = models.BooleanField(default=False)

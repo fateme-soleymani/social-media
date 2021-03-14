@@ -8,13 +8,14 @@ from django.views.generic.base import View
 
 from apps.post.models import Post
 from apps.user.forms import RegisterUserForm
-from apps.user.models.user import User, FollowerFollowing
+from apps.user.models.user import User
+from apps.user.models.followerfollowing import FollowerFollowing
 
 
 # view for user register
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
-    success_url = '/login/'
+    success_url = '/'
     template_name = 'registration/register_user.html'
 
     def post(self, request):
@@ -76,22 +77,22 @@ class Following(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         following = FollowerFollowing.objects.filter(from_user=user, accept=True)
-        return render(request, 'user/following_list.html', {'following': following})
+        return render(request, 'user/following_list.html', {'following':following})
 
 
 # view for show followers
 class Follower(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
-        followers = FollowerFollowing.objects.filter(to_user=user, accept=True)
-        return render(request, 'user/follower_list.html', {'followers': followers})
+        follower = FollowerFollowing.objects.filter(to_user=user, accept=True)
+        return render(request, 'user/follower_list.html', {'follower': follower})
 
 
 # view for edit user info
 class UpdateUser(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'user/edit_user.html'
-    fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio']
+    fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio', 'profile_pic']
     success_url = '/user/'
 
 
@@ -108,6 +109,14 @@ class AcceptRequest(LoginRequiredMixin, View):
     def get(self, request, pk):
         user = request.user
         FollowerFollowing.objects.filter(to_user_id=user, from_user=pk).update(accept=True)
+        return redirect('follow_requests')
+
+
+# view for delete request
+class DeleteRequest(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        user = request.user
+        FollowerFollowing.objects.filter(to_user_id=user, from_user=pk).delete()
         return redirect('follow_requests')
 
 

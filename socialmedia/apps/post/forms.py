@@ -1,12 +1,16 @@
 from django import forms
 
+from django.forms import ModelForm
+
+from apps.post.models import Post
+
 
 # form for create post
-class CreatePostForm(forms.Form):
-    title = forms.CharField(max_length=100)
-    content = forms.CharField(widget=forms.Textarea)
+class CreatePostForm(ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'post_pic']
 
 
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
-

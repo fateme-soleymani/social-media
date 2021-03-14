@@ -3,14 +3,15 @@
 {% block main %}
     <ul>
         <li><b>{{ post.user | title }}</b> {% p_age post.created %}</li>
-        {#        <li><h3>{{ post.title }}</h3></li>#}
         <li><h2>{{ post.content }}</h2></li>
-
+        {% if post.post_pic %}
+            <img src="{{ post.post_pic.url }}" style="width: 120px; height: 120px">
+        {% endif %}
 
     </ul>
     <button class="btn_t"><i class="fa fa-comment"></i></button>
     <button class="btn_t"><i class="fa fa-heart"></i><a
-                        href="{% url 'like' post.id %}">{% count_like post.id %}</a></button>
+            href="{% url 'like' post.id %}">{{ post.like.all | length }}</a></button>
 
     <ul>
 

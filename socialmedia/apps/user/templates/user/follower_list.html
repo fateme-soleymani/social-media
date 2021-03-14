@@ -1,8 +1,7 @@
 {% extends 'base_profile.html' %}
 {% block main %}
-    <h2>{{ followers | length }}</h2>
-    {% for f in followers %}
+    <h2>{{ follower | length }}</h2>
+    {% for f in follower %}
         <li>{{ f.from_user.email }}</li>
-
     {% endfor %}
 {% endblock %}

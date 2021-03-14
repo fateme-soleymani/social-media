@@ -1,7 +1,7 @@
 from django import template
 from django.utils.timezone import now
 
-from apps.post.models import Like, Comment, Post
+from apps.post.models import Comment
 
 register = template.Library()
 
@@ -62,10 +62,6 @@ def p_age(time):
             return '{} months ago'.format(month)
 
 
-@register.simple_tag(name='count_like')
-def count_like(post_id):
-    likes = Like.objects.filter(post=post_id)
-    return len(likes)
 
 
 @register.inclusion_tag('post/content.html')

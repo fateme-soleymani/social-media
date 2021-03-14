@@ -65,13 +65,13 @@
 <body>
 <div class="base">
     <ul>
-        <li><a href="{% url 'my_post_list' %}">My posts {{ my_post_list | length }}</a></li>
+        <li><a href="{% url 'user_detail' request.user.slug %}">My profile</a></li>
         <li><a href="{% url 'user_list' %}">Search User</a></li>
         <li><a href="{% url 'friends_post' %}">Home</a></li>
         <li><a href="{% url 'create_post' %}">create new post</a></li>
-        <li><a href="{% url 'followers' %}">Followers {{ followers | length }}</a></li>
-        <li><a href="{% url 'following' %}">Followings {{ following | length }}</a></li>
-        <li><a href="{% url 'follow_requests' %}">Follow Requests {{ follow_request | length }}</a></li>
+        <li><a href="{% url 'followers' %}">Followers</a></li>
+        <li><a href="{% url 'following' %}">Followings</a></li>
+        <li><a href="{% url 'follow_requests' %}">Follow Requests</a></li>
         <li>{{ request.user.email }}</li>
         <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>
         <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>
