@@ -46,11 +46,15 @@ def p_age(time):
                     hour = 24 + hour
                     return '{} hours ago'.format(hour)
                 elif hour == 0:
-                    return '{} minutes ago'.format(minute)
+                    if minute == 0:
+                        return 'now'
+                    elif minute > 0:
+                        return '{} minutes ago'.format(minute)
                 elif hour == 1:
                     if minute < 0:
                         minute = minute + 60
                         return '{} minutes ago'.format(minute)
+
                     return 'an hour ago'
                 elif hour > 1:
                     if minute < 0:

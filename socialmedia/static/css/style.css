@@ -1,0 +1,138 @@
+/*body {*/
+/*    margin: 0;*/
+/*}*/
+
+/*.base ul {*/
+/*    list-style-type: none;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    overflow: hidden;*/
+/*    background-color: #5f5d5d;*/
+/*}*/
+
+/*.base li {*/
+/*    float: left;*/
+/*}*/
+
+/*.base li a {*/
+/*    display: block;*/
+/*    color: white;*/
+/*    text-align: center;*/
+/*    padding: 14px 16px;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.base li a:hover:not(.active) {*/
+/*    background-color: #fa6060;*/
+/*}*/
+
+/*.base .active {*/
+/*    background-color: #fa6060;*/
+/*}*/
+
+/*.main ul {*/
+/*    list-style: none;*/
+/*}*/
+
+/*.main li {*/
+/*    padding: 0.5em;*/
+/*}*/
+
+
+/*.btn {*/
+/*    border: 3px solid #fe59ee;*/
+/*    background-color: #fe59ee;*/
+/*    border-radius: 2em 2em;*/
+/*    padding: 6px;*/
+/*}*/
+
+/*.btn_t {*/
+/*    background-color: DodgerBlue;*/
+/*    border: none;*/
+/*    color: white;*/
+/*    padding: 12px 16px;*/
+/*    font-size: 16px;*/
+/*    cursor: pointer;*/
+/*}*/
+body {
+    /*margin-top: 13px;*/
+}
+
+body ul {
+    list-style: none;
+}
+
+body a {
+    text-decoration: none;
+    color: black;
+}
+
+body a:hover {
+    color: #818181;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    grid-template-areas:
+"sidenav main sidenav2";
+    height: 100vh;
+}
+
+.sidenav {
+    grid-area: sidenav;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    padding-top: 20px;
+    border-right: gray solid 0.5px;
+    font-weight: bold;
+    padding-left: 80px;
+
+}
+
+.sidenav a {
+    padding: 20px 10px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #818181;
+}
+
+
+.main {
+    grid-area: main;
+
+}
+
+.sidenav2 {
+    grid-area: sidenav2;
+    border-left: gray solid 0.5px;
+}
+
+.imagecontainer {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.imagepost {
+    width: 400px;
+    height: 400px;
+    padding-left: 19%;
+}
+
+.postborder {
+    border-bottom: #c1c0c0 0.5px solid;
+    padding: 20px 20px;
+}

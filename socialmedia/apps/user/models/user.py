@@ -16,12 +16,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     bio = models.TextField('bio', blank=True)
     gender = models.CharField(choices=(('F', 'Female'), ('M', 'Male')), default='d', max_length=1)
     slug = AutoSlugField(populate_from=['email'], unique=True, )
-
     profile_pic = models.ImageField(default='default_prof.png', null=True, blank=True)
-
     is_active = models.BooleanField(('active'), default=True)
     is_superuser = models.BooleanField(('superuser'), default=False)
     is_staff = models.BooleanField(('staff'), default=False)
+
 
     objects = UserManager()
 
@@ -32,6 +31,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = ('myuser')
         verbose_name_plural = ('myusers')
         app_label = 'user'
+
+    def get_user_list(self):
+        user_friends = self.friends.all()
+        user_except_you = User.objects.exclude(id=self.id)
+        user_list = set(user_except_you) - set(user_friends)
+        return user_list
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)

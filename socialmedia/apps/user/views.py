@@ -28,10 +28,10 @@ class Search(LoginRequiredMixin, View):
     def get(self, request):
         email = request.GET.get('email')
         if email:
-            user = User.objects.exclude(id=request.user.id).filter(email__startswith=email)
+            user2 = User.objects.exclude(id=request.user.id).filter(email__startswith=email)
         else:
-            user = None
-        return render(request, 'user/search.html', {'user': user})
+            user2 = None
+        return render(request, 'post/home_post.html', {'user2': user2})
 
 
 # show list of user

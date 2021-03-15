@@ -1,7 +1,8 @@
 {% extends 'base_profile.html' %}
 {% load custom_tags %}
 {% block main %}
-    <form method="post">{% csrf_token %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         <table>
             <tr>{{ form.as_table }}</tr>
         </table>

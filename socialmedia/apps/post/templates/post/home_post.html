@@ -1,10 +1,26 @@
 {% extends 'base_profile.html' %}
+{% load custom_tags %}
 {% block main %}
-{% for friend_posts  in all_friends_posts %}
-    {% for post in friend_posts %}
-        <ul>
-            <li><a href="{% url 'post_detail' post.id %}">{{ post.user.email }}:{{ post.title }}</a></li>
-        </ul>
+    {% for friend_posts  in all_friends_posts %}
+        {% for post in friend_posts %}
+            <div class="postborder">
+
+                <a href="{% url 'user_detail' post.user.id %}"><b>{{ post.user.email }}</b></a> {% p_age post.created %}
+                <a href="{% url 'post_detail' post.id %}"><br>{{ post.title }}<br>
+                    {% if post.post_pic %}
+                        <img class="imagepost" src="{{ post.post_pic.url }}"><br>
+                    {% endif %}
+                    {{ post.content }}</a><br><br>
+
+
+                <button style="margin-right: 50px" class="btn_t"><a
+                        href="{% url 'post_detail' post.id %}"><i class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a>
+                </button>
+
+                <button class="btn_t"><a
+                        href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
+                </button>
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
 {% endblock main %}

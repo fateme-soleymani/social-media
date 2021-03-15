@@ -66,7 +66,7 @@ class LikePost(View):
         user = request.user
         post = Post.objects.get(id=pk)
         post.like.add(user)
-        return redirect('post_detail', pk)
+        return redirect('friends_post')
 
 
 class UpdatePost(UpdateView):

@@ -1,85 +1,66 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            margin: 0;
-        }
-
-        .base ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #5f5d5d;
-        }
-
-        .base li {
-            float: left;
-        }
-
-        .base li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .base li a:hover:not(.active) {
-            background-color: #fa6060;
-        }
-
-        .base .active {
-            background-color: #fa6060;
-        }
-
-        .main ul {
-            list-style: none;
-        }
-
-        .main li {
-            padding: 0.5em;
-        }
-
-
-        .btn {
-            border: 3px solid #fe59ee;
-            background-color: #fe59ee;
-            border-radius: 2em 2em;
-            padding: 6px;
-        }
-
-        .btn_t {
-            background-color: DodgerBlue;
-            border: none;
-            color: white;
-            padding: 12px 16px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
     <title>{% block title %}Home{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
-<div class="base">
-    <ul>
-        <li><a href="{% url 'user_detail' request.user.slug %}">My profile</a></li>
-        <li><a href="{% url 'user_list' %}">Search User</a></li>
-        <li><a href="{% url 'friends_post' %}">Home</a></li>
-        <li><a href="{% url 'create_post' %}">create new post</a></li>
-        <li><a href="{% url 'followers' %}">Followers</a></li>
-        <li><a href="{% url 'following' %}">Followings</a></li>
-        <li><a href="{% url 'follow_requests' %}">Follow Requests</a></li>
-        <li>{{ request.user.email }}</li>
-        <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>
-        <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>
-    </ul>
-</div>
-<div class="main">
-    {% block main %}
-    {% endblock %}
+{#<div class="base">#}
+{#    <ul>#}
+{#        <li><a href="{% url 'user_detail' request.user.slug %}">My profile</a></li>#}
+{#        <li><a href="{% url 'user_list' %}">Search User</a></li>#}
+{#        <li><a href="{% url 'friends_post' %}">Home</a></li>#}
+{#        <li><a href="{% url 'create_post' %}">create new post</a></li>#}
+{#        <li><a href="{% url 'followers' %}">Followers</a></li>#}
+{#        <li><a href="{% url 'following' %}">Followings</a></li>#}
+{#        <li><a href="{% url 'follow_requests' %}">Follow Requests</a></li>#}
+{#        <li>{{ request.user.email }}</li>#}
+{#        <li><img src="{{ request.user.profile_pic.url }}"></li>#}
+{#        <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>#}
+{#        <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>#}
+{#    </ul>#}
+{#</div>#}
+<div class="grid-container">
+    <div class="sidenav">
+        <a href="{% url 'user_detail' request.user.slug %}"><img class="imagecontainer"
+                                                                 src="{{ request.user.profile_pic.url }}"></a>
+        <a href="{% url 'friends_post' %}">Home</a>
+        <a href="{% url 'create_post' %}">Create post</a>
+        <a href="{% url 'followers' %}">Followers</a>
+        <a href="{% url 'following' %}">Followings</a>
+        <a href="{% url 'follow_requests' %}">Follow Requests</a>
+        <a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a>
+        <a class="active" href="{% url 'logout' %}">Logout</a>
+    </div>
+    <div class="main">
+        {% block main %}
+        {% endblock %}
+    </div>
+    <div class="sidenav2">
+        <form action="{% url 'search' %}">
+            <input placeholder="" name="email">
+
+            <button type="submit">Search</button>
+            </br></br>
+        </form>
+        {% for user in request.user.get_user_list %}
+            <li>{{ user.email }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
+        {% endfor %}
+        {% if user2 %}
+            <ul>
+                {% for u in user2 %}
+                    <li>{{ u.email }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {#        {% else %}#}
+            {#            <p>There is no results</p>#}
+        {% endif %}
+    </div>
+
+
 </div>
 </body>
 </html>
