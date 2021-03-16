@@ -24,44 +24,51 @@
 {#</div>#}
 <div class="grid-container">
     <div class="sidenav">
-    <div style=" position: fixed;">
-        <a href="{% url 'user_detail' request.user.slug %}">{% if request.user.profile_pic %}<img class="user-pic"
-                                                                 src="{{ request.user.profile_pic.url }}">
-        {% else %}
-            <div class="default-pic"></div>
-        {% endif %}</a>
-        <a href="{% url 'friends_post' %}">Home</a>
-        <a href="{% url 'create_post' %}">Create post</a>
-        <a href="{% url 'followers' %}">Followers</a>
-        <a href="{% url 'following' %}">Followings</a>
-        <a href="{% url 'follow_requests' %}">Follow Requests</a>
-        <a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a>
-        <a class="active" href="{% url 'logout' %}">Logout</a>
-    </div></div>
+        <div style=" position: fixed;">
+            <a href="{% url 'user_detail' request.user.slug %}">{% if request.user.profile_pic %}<img class="user-pic"
+                                                                                                      src="{{ request.user.profile_pic.url }}">
+            {% else %}
+                <div class="default-pic"></div>
+            {% endif %}</a>
+            <a href="{% url 'friends_post' %}">Home</a>
+            <a href="{% url 'create_post' %}">Create post</a>
+            <a href="{% url 'followers' %}">Followers</a>
+            <a href="{% url 'following' %}">Followings</a>
+            <a href="{% url 'follow_requests' %}">Follow Requests</a>
+            <a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a>
+            <a class="active" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
     <div class="main">
         {% block main %}
         {% endblock %}
     </div>
     <div class="sidenav2">
-        <form action="{% url 'search' %}">
-            <input placeholder="" name="email">
+        <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Search.." title="Type in a category">
+        <ul id="myMenu">
+            {% for i in user.all_user %}
+                <li><a href="#">{{ i.email }}</a></li>
+            {% endfor %}
+        </ul>
 
-            <button type="submit">Search</button>
-            </br></br>
-        </form>
-        {% for user in request.user.get_user_list %}
-            <li>{{ user.email }}<a href="{% url 'user_follow' user.id %}"><input type="submit" value="Follow"></a></li>
-        {% endfor %}
-        {% if user2 %}
-            <ul>
-                {% for u in user2 %}
-                    <li>{{ u.email }}<a href="{% url 'user_follow' u.id %}"><input type="submit" value="Follow"></a>
-                    </li>
-                {% endfor %}
-            </ul>
-            {#        {% else %}#}
-            {#            <p>There is no results</p>#}
-        {% endif %}
+        <script>
+            function myFunction() {
+                var input, filter, ul, li, a, i;
+                input = document.getElementById("mySearch");
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("myMenu");
+                li = ul.getElementsByTagName("li");
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName("a")[0];
+                    if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            }
+
+        </script>
     </div>
 
 

@@ -23,26 +23,6 @@ class RegisterUser(CreateView):
         return super(RegisterUser, self).post(request)
 
 
-# view for search for username
-class Search(LoginRequiredMixin, View):
-    def get(self, request):
-        email = request.GET.get('email')
-        if email:
-            user2 = User.objects.exclude(id=request.user.id).filter(email__startswith=email)
-        else:
-            user2 = None
-        return render(request, 'post/home_post.html', {'user2': user2})
-
-
-# show list of user
-class UserList(LoginRequiredMixin, View):
-    def get(self, request):
-        user_friends = request.user.friends.all()
-        user_except_you = User.objects.exclude(id=request.user.id)
-        user_list = set(user_except_you) - set(user_friends)
-        return render(request, 'user/user_list.html', {'user_list': user_list})
-
-
 # view for show user profile
 class UserDetail(LoginRequiredMixin, View):
     def get(self, request, slug):
@@ -50,15 +30,15 @@ class UserDetail(LoginRequiredMixin, View):
         return render(request, 'user/user_profile.html', {'posts': posts})
 
 
-# view for follow request
-class UserFollow(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        user = request.user
-        user.friends.add(User.objects.get(id=pk))
-        user_friends = User.objects.get(id=request.user.id).friends.all()
-        user_except_you = User.objects.exclude(id=request.user.id)
-        user_list = set(user_except_you) - set(user_friends)
-        return render(request, 'user/user_list.html', {'user_list': user_list})
+# # view for follow request
+# class UserFollow(LoginRequiredMixin, View):
+#     def get(self, request, pk):
+#         user = request.user
+#         user.friends.add(User.objects.get(id=pk))
+#         user_friends = User.objects.get(id=request.user.id).friends.all()
+#         user_except_you = User.objects.exclude(id=request.user.id)
+#         user_list = set(user_except_you) - set(user_friends)
+#         return render(request, 'user/user_list.html', {'user_list': user_list})
 
 
 # view for  show following post in home

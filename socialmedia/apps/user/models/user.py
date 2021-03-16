@@ -21,7 +21,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(('superuser'), default=False)
     is_staff = models.BooleanField(('staff'), default=False)
 
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -48,3 +47,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.first_name
 
+    def all_user(self):
+        return User.objects.all()

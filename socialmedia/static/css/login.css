@@ -68,3 +68,8 @@ span.psw {
         width: 100%;
     }
 }
+
+.error {
+    color: red;
+    margin-left: 14px;
+}

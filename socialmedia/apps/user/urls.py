@@ -4,9 +4,7 @@ from apps.user.views import *
 
 urlpatterns = [
     path('', FriendsPost.as_view(), name='friends_post'),
-    path('search/', Search.as_view(), name='search'),
-    path('list/', UserList.as_view(), name='user_list'),
-    path('follow/<int:pk>/', UserFollow.as_view(), name='user_follow'),
+    # path('follow/<int:pk>/', UserFollow.as_view(), name='user_follow'),
     path('followers/', Follower.as_view(), name='followers'),
     path('following/', Following.as_view(), name='following'),
     path('edit_user/<int:pk>/', UpdateUser.as_view(), name='edit_user'),
@@ -14,5 +12,4 @@ urlpatterns = [
     path('accept_requests/<int:pk>/', AcceptRequest.as_view(), name='accept'),
     path('delete_requests/<int:pk>/', DeleteRequest.as_view(), name='delete'),
     path('<slug:slug>/', UserDetail.as_view(), name='user_detail'),
-
 ]
