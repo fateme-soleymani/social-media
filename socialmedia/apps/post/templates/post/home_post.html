@@ -3,20 +3,30 @@
 {% block main %}
     {% for friend_posts  in all_friends_posts %}
         {% for post in friend_posts %}
-            <div class="postborder">
 
-                <a href="{% url 'user_detail' post.user.id %}"><b>{{ post.user.email }}</b></a> {% p_age post.created %}
-                <a href="{% url 'post_detail' post.id %}"><br>{{ post.title }}<br>
-                    {% if post.post_pic %}
-                        <img class="imagepost" src="{{ post.post_pic.url }}"><br>
+            <div class="post-border">
+                <header class="small-profile">
+                    {% if post.user.profile_pic %}
+                        <img class="user-pic"
+                             src="{{ post.user.profile_pic.url }}">
+                    {% else %}
+                        <div class="default-pic"></div>
                     {% endif %}
-                    {{ post.content }}</a><br><br>
+                    <div><a href="{% url 'user_detail' post.user.slug %}"><b>{{ post.user.email }}</b></a>
+                        <br>{% p_age post.created %}</div>
+                </header>
+
+                <p class="title-post"><br>{{ post.title }}<br></p>
+                <a href="{% url 'post_detail' post.id %}">{% if post.post_pic %}
+                    <img class="image-post" src="{{ post.post_pic.url }}"><br>
+                {% endif %}
+                    <p class="post-cont">{{ post.content }}</p></a><br><br>
 
 
-                <button style="margin-right: 50px" class="btn_t"><a
-                        href="{% url 'post_detail' post.id %}"><i class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a>
+                <button style="margin-right: 10px" class="btn_t"><a
+                        href="{% url 'post_detail' post.id %}"><i
+                        class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a>
                 </button>
-
                 <button class="btn_t"><a
                         href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
                 </button>

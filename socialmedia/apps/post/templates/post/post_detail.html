@@ -15,7 +15,7 @@
     <ul>
 
         {% for comment in my_comment %}
-            <li>{{ comment.user.email }}:{{ comment.text }}</li>
+            <li>{{ comment.user.email }}  {{ comment.text }}</li>
             {% if comment.post.user == request.user %}
                 <button class="btn_t"><i class="fa fa-trash"></i><a href="{% url 'delete_cm' comment.id %}">Delete</a>
                 </button>

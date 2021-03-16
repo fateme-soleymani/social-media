@@ -68,7 +68,7 @@ class FriendsPost(LoginRequiredMixin, View):
         all_friends_posts = [Post.objects.filter(user=request.user)]
         following = FollowerFollowing.objects.filter(from_user=user, accept=True)
         for friend in following:
-            all_friends_posts.append(Post.objects.filter(user=friend.to_user))
+            all_friends_posts.append(Post.objects.filter(user=friend.to_user).order_by('created'))
         return render(request, 'post/home_post.html', {'all_friends_posts': all_friends_posts})
 
 
