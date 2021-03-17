@@ -12,4 +12,6 @@ urlpatterns = [
     path('accept_requests/<int:pk>/', AcceptRequest.as_view(), name='accept'),
     path('delete_requests/<int:pk>/', DeleteRequest.as_view(), name='delete'),
     path('<slug:slug>/', UserDetail.as_view(), name='user_detail'),
+
+    path('activate/<uidb64>/<token>', VerificationView.as_view(), name='activate')
 ]

@@ -48,4 +48,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
     def all_user(self):
-        return User.objects.all()
+        return User.objects.exclude(id=self.id)

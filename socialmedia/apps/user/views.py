@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash, authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import EmailMessage
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import View
@@ -11,6 +13,12 @@ from apps.user.forms import RegisterUserForm
 from apps.user.models.user import User
 from apps.user.models.followerfollowing import FollowerFollowing
 
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from .utils import token_genarator
+
 
 # view for user register
 class RegisterUser(CreateView):
@@ -19,8 +27,52 @@ class RegisterUser(CreateView):
     template_name = 'registration/register_user.html'
 
     def post(self, request):
-        messages.success(request, 'User was successfully created.')
-        return super(RegisterUser, self).post(request)
+        if request.method == 'POST':
+            form = RegisterUserForm(request.POST, request.FILES)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = False
+                user.save()
+                """path to view
+                    -getting domain we are on 
+                    -relative url to verification
+                    -encode uid
+                    -token 
+                      """
+                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+
+                domain = get_current_site(request).domain
+                link = reverse('activate', kwargs={
+                    'uidb64': uidb64, 'token': token_genarator.make_token(user)}
+                               )
+                activate_url = 'http://' + domain + link
+                email_body = 'Hi' + user.email + 'please use this link to verify your account\n' + activate_url
+                email_subject = 'Activate your account'
+                email = form.cleaned_data.get('email')
+                email = EmailMessage(
+                    email_subject, email_body, to=[email]
+                )
+                email.send()
+                return HttpResponse('Please confirm your email address to complete the registration')
+        else:
+            form = RegisterUserForm()
+        return render(request, 'registration/register_user.html', {'form': form})
+
+
+class VerificationView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and token_genarator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            return redirect('/')
+        else:
+            return HttpResponse('Activation link is invalid!')
 
 
 # view for show user profile
@@ -57,7 +109,7 @@ class Following(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         following = FollowerFollowing.objects.filter(from_user=user, accept=True)
-        return render(request, 'user/following_list.html', {'following':following})
+        return render(request, 'user/following_list.html', {'following': following})
 
 
 # view for show followers
