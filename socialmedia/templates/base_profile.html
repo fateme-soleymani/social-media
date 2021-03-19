@@ -11,18 +11,15 @@
 <div class="grid-container">
     <div class="sidenav">
         <div style=" position: fixed;">
-            <a href="{% url 'user_detail' request.user.slug %}">{% if request.user.profile_pic %}<img class="user-pic"
-                                                                                                      src="{{ request.user.profile_pic.url }}">
-            {% else %}
-                <div class="default-pic"></div>
-            {% endif %}</a>
-            <a href="{% url 'friends_post' %}">Home</a>
-            <a href="{% url 'create_post' %}">Create post</a>
-            <a href="{% url 'followers' %}">Followers</a>
-            <a href="{% url 'following' %}">Followings</a>
-            <a href="{% url 'follow_requests' %}">Follow Requests</a>
-            <a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a>
-            <a class="active" href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'user_detail' request.user.slug %}"><img class="user-pic"
+                                                                     src="{{ request.user.profile_pic.url }}"></a>
+            <a href="{% url 'friends_post' %}"><i class="fa fa-home"></i>Home</a>
+            <a href="{% url 'create_post' %}"><i class="fa fa-plus-square"></i>Create post</a>
+            <a href="{% url 'followers' %}"><i class="fa fa-user"></i>Followers</a>
+            <a href="{% url 'following' %}"><i class="fa fa-users"></i>Followings</a>
+            <a href="{% url 'follow_requests' %}"><i class="fa fa-user-plus"></i>Follow Requests</a>
+            <a class="active" href="{% url 'edit_user' request.user.id %}"><i class="fa fa-edit"></i>Edit Info</a>
+            <a class="active" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Logout</a>
         </div>
     </div>
     <div class="main">

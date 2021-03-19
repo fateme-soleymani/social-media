@@ -7,10 +7,12 @@ from apps.user.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
-    email = models.EmailField("email address", unique=True, null=False)
+    email = models.EmailField("email address", unique=True, blank=True, null=True)
+    phone = models.CharField("mobile number", max_length=11, unique=True, null=True, blank=True, default='09xxxxxxxxx')
     friends = models.ManyToManyField('User', through='FollowerFollowing')
     link = models.URLField('link', max_length=200, blank=True)
     bio = models.TextField('bio', blank=True)
@@ -23,7 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     class Meta:

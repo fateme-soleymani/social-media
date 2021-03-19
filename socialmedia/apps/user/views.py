@@ -21,6 +21,7 @@ from .utils import token_genarator
 
 from django.contrib.messages.views import SuccessMessageMixin
 
+
 # view for user register
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
@@ -31,8 +32,16 @@ class RegisterUser(CreateView):
         if request.method == 'POST':
             form = RegisterUserForm(request.POST, request.FILES)
             if form.is_valid():
-                user = form.save(commit=False)
-                user.is_active = False
+                if form.cleaned_data['email'] == None:
+                    username = form.cleaned_data['phone']
+                elif form.cleaned_data['phone'] == None:
+                    username = form.cleaned_data['email']
+                # user = form.save(commit=False)
+                validated_data = form.cleaned_data
+                user = User(username=username, profile_pic=validated_data['profile_pic'], phone=validated_data['phone'], email=validated_data['email'],
+                            password=validated_data['password1'])
+                # user.is_active = False
+
                 user.save()
                 """path to view
                     -getting domain we are on 
@@ -40,21 +49,21 @@ class RegisterUser(CreateView):
                     -encode uid
                     -token 
                       """
-                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-
-                domain = get_current_site(request).domain
-                link = reverse('activate', kwargs={
-                    'uidb64': uidb64, 'token': token_genarator.make_token(user)}
-                               )
-                activate_url = 'http://' + domain + link
-                email_body = 'Hi' + user.email + 'please use this link to verify your account\n' + activate_url
-                email_subject = 'Activate your account'
-                email = form.cleaned_data.get('email')
-                email = EmailMessage(
-                    email_subject, email_body, to=[email]
-                )
-                email.send()
-                return HttpResponse('Please confirm your email address to complete the registration')
+                # uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                #
+                # domain = get_current_site(request).domain
+                # link = reverse('activate', kwargs={
+                #     'uidb64': uidb64, 'token': token_genarator.make_token(user)}
+                #                )
+                # activate_url = 'http://' + domain + link
+                # email_body = 'Hi please use this link to verify your account\n\n' + activate_url
+                # email_subject = 'Activate your account'
+                # email = form.cleaned_data.get('email')
+                # email = EmailMessage(
+                #     email_subject, email_body, to=[email]
+                # )
+                # email.send()
+                # return HttpResponse('Please confirm your email address to complete the registration')
         else:
             form = RegisterUserForm()
         return render(request, 'registration/register_user.html', {'form': form})
@@ -122,7 +131,7 @@ class Follower(LoginRequiredMixin, View):
 
 
 # view for edit user info
-class UpdateUser(LoginRequiredMixin, SuccessMessageMixin,UpdateView):
+class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user/edit_user.html'
     fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio', 'profile_pic']

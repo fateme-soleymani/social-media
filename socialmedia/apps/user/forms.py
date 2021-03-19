@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from apps.user.models.user import User
 
@@ -6,4 +7,14 @@ from apps.user.models.user import User
 class RegisterUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('profile_pic','email', 'first_name', 'last_name', 'date_of_birth', 'password1', 'password2', 'link', 'gender', 'bio')
+        fields = (
+            'profile_pic', 'email', 'phone', 'password1', 'password2')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        phone = cleaned_data.get('phone')
+        if email == None and phone == None:
+            raise forms.ValidationError('You must enter an email or phone number')
+        else:
+            return cleaned_data
