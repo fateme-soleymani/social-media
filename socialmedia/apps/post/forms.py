@@ -23,3 +23,5 @@ class CreatePostForm(ModelForm):
 
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
+
+

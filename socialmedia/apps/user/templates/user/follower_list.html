@@ -2,6 +2,6 @@
 {% block main %}
     <h2>{{ follower | length }}</h2>
     {% for f in follower %}
-        <li>{{ f.from_user.email }}</li>
+        <li>{{ f.from_user.user_name }}</li>
     {% endfor %}
 {% endblock %}

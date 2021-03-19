@@ -7,21 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
-{#<div class="base">#}
-{#    <ul>#}
-{#        <li><a href="{% url 'user_detail' request.user.slug %}">My profile</a></li>#}
-{#        <li><a href="{% url 'user_list' %}">Search User</a></li>#}
-{#        <li><a href="{% url 'friends_post' %}">Home</a></li>#}
-{#        <li><a href="{% url 'create_post' %}">create new post</a></li>#}
-{#        <li><a href="{% url 'followers' %}">Followers</a></li>#}
-{#        <li><a href="{% url 'following' %}">Followings</a></li>#}
-{#        <li><a href="{% url 'follow_requests' %}">Follow Requests</a></li>#}
-{#        <li>{{ request.user.email }}</li>#}
-{#        <li><img src="{{ request.user.profile_pic.url }}"></li>#}
-{#        <li style="float:right"><a class="active" href="{% url 'logout' %}">Logout</a></li>#}
-{#        <li style="float:right"><a class="active" href="{% url 'edit_user' request.user.id %}">Edit Info</a></li>#}
-{#    </ul>#}
-{#</div>#}
+{% include 'post/message.html' %}
 <div class="grid-container">
     <div class="sidenav">
         <div style=" position: fixed;">

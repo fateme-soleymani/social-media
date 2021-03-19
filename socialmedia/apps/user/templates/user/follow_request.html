@@ -1,7 +1,7 @@
 {% extends 'base_profile.html' %}
 {% block main %}
     {% for f in follow_request %}
-        <li>{{ f.from_user.email }}</li>
+        <li>{{ f.from_user.user_name }}</li>
         <button><a href="{% url 'accept' f.from_user.id %}">Accept</a></button>
         <button><a href="{% url 'delete'  f.from_user.id %}">Delete</a></button>
     {% endfor %}

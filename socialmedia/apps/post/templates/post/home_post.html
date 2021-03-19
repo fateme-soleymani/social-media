@@ -25,11 +25,12 @@
 
                 <button style="margin-right: 10px" class="btn_t"><a
                         href="{% url 'post_detail' post.id %}"><i
-                        class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a>
-                </button>
+                        class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a></button>
+
                 <button class="btn_t"><a
                         href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
                 </button>
+
             </div>
         {% endfor %}
     {% endfor %}

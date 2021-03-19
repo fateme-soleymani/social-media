@@ -19,6 +19,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from .utils import token_genarator
 
+from django.contrib.messages.views import SuccessMessageMixin
 
 # view for user register
 class RegisterUser(CreateView):
@@ -121,10 +122,11 @@ class Follower(LoginRequiredMixin, View):
 
 
 # view for edit user info
-class UpdateUser(LoginRequiredMixin, UpdateView):
+class UpdateUser(LoginRequiredMixin, SuccessMessageMixin,UpdateView):
     model = User
     template_name = 'user/edit_user.html'
     fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio', 'profile_pic']
+    success_message = 'Your information has been updated'
     success_url = '/user/'
 
 
@@ -184,8 +186,8 @@ class LoginView(View):
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
-                    message = 'Login was successful!'
                     login(request, user)
+                    messages.success(request, 'Login was successful!')
                     return redirect('friends_post')
                 else:
                     message = 'User is deactivated!'
@@ -194,4 +196,5 @@ class LoginView(View):
         elif is_logout:
             logout(request)
             message = 'Logout successful'
+
         return render(request, 'user/login.html', {'message': message})

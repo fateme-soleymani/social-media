@@ -35,7 +35,6 @@
             <td><input class="btn_t" type="submit" VALUE="Send"></td>
         </tr>
     </form>
-
     <br>
     {% if post.user == request.user %}
         <button class="btn_t"><i class="fa fa-edit"></i><a href="{% url 'edit_post' post.id %}">Edit</a></button>

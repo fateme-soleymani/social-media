@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView
 from django.views.generic.base import View
+from django.contrib import messages
 
 from apps.post.forms import CreatePostForm, CommentForm
 from apps.post.models import Post, Comment
@@ -52,9 +53,10 @@ class CreatePost(View):
             user = request.user
             validated_data = form.cleaned_data
             post_obj = Post(title=validated_data['title'],
-                            content=validated_data['content'],post_pic=validated_data['post_pic'], user=user)
+                            content=validated_data['content'], post_pic=validated_data['post_pic'], user=user)
             post_obj.save()
-        return render(request, 'post/post_create.html', {'form': form})
+            messages.success(request, 'Post created successfully')
+        return redirect('friends_post')
 
 
 class LikePost(View):
@@ -72,7 +74,7 @@ class LikePost(View):
 class UpdatePost(UpdateView):
     model = Post
     template_name = 'post/edit_post.html'
-    fields = ['title', 'content','post_pic']
+    fields = ['title', 'content', 'post_pic']
     success_url = '/user/'
 
 
