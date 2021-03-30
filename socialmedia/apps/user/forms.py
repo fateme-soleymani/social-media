@@ -8,7 +8,7 @@ class RegisterUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = (
-            'profile_pic', 'email', 'phone', 'password1', 'password2')
+            'profile_pic', 'username_media', 'email', 'phone', 'password1', 'password2')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -18,3 +18,7 @@ class RegisterUserForm(UserCreationForm):
             raise forms.ValidationError('You must enter an email or phone number')
         else:
             return cleaned_data
+
+
+class SmsForm(forms.Form):
+    sms = forms.CharField(max_length=3)

@@ -3,7 +3,7 @@ from django.views.generic import UpdateView, DeleteView
 from django.views.generic.base import View
 from django.contrib import messages
 
-from apps.post.forms import CreatePostForm, CommentForm
+from apps.post.forms import *
 from apps.post.models import Post, Comment
 
 
@@ -76,7 +76,15 @@ class UpdatePost(UpdateView):
     template_name = 'post/edit_post.html'
     fields = ['title', 'content', 'post_pic']
     success_url = '/user/'
-
+# class UpdatePost(View):
+#     def get(self, request):
+#         form = UpdatePostForm()
+#         return render(request, 'post/edit_post.html', {'form': form})
+#
+#     def post(self, request):
+#         form = CommentForm(request.POST,request.FILES)
+#         if form.is_valid():
+#
 
 class DeletePost(DeleteView):
     model = Post

@@ -1,9 +1,7 @@
 {% extends 'base_profile.html' %}
 {% load custom_tags %}
 {% block main %}
-    {% for friend_posts  in all_friends_posts %}
-        {% for post in friend_posts %}
-
+{% for post in posts %}
             <div class="post-border">
                 <header class="small-profile">
                     {% if post.user.profile_pic %}
@@ -12,7 +10,7 @@
                     {% else %}
                         <div class="default-pic"></div>
                     {% endif %}
-                    <div><a href="{% url 'user_detail' post.user.slug %}"><b>{{ post.user.email }}</b></a>
+                    <div><a href="{% url 'user_detail' post.user.slug %}"><b>{{ post.user.username_media }}</b></a>
                         <br>{% p_age post.created %}</div>
                 </header>
 
@@ -33,5 +31,4 @@
 
             </div>
         {% endfor %}
-    {% endfor %}
 {% endblock main %}

@@ -29,8 +29,8 @@
     <div class="sidenav2">
         <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Search.." title="Type in a category">
         <ul id="myMenu">
-            {% for i in user.all_user %}
-                <li><a href="#">{{ i.email }}</a></li>
+            {% for i in request.user.all_user %}
+                <li><a href="{% url 'user_detail' i.slug %}">{{ i.username_media }}</a></li>
             {% endfor %}
         </ul>
 
@@ -53,8 +53,6 @@
 
         </script>
     </div>
-
-
 </div>
 </body>
 </html>

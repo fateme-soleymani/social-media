@@ -1,25 +1,26 @@
+from random import randint
+
+import ghasedak
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash, authenticate, login, logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.encoding import force_text, force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import View
 
 from apps.post.models import Post
-from apps.user.forms import RegisterUserForm
-from apps.user.models.user import User
+from apps.user.forms import RegisterUserForm, SmsForm
 from apps.user.models.followerfollowing import FollowerFollowing
-
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.contrib.sites.shortcuts import get_current_site
-from django.urls import reverse
+from apps.user.models.user import User
 from .utils import token_genarator
-
-from django.contrib.messages.views import SuccessMessageMixin
 
 
 # view for user register
@@ -32,41 +33,63 @@ class RegisterUser(CreateView):
         if request.method == 'POST':
             form = RegisterUserForm(request.POST, request.FILES)
             if form.is_valid():
-                if form.cleaned_data['email'] == None:
-                    username = form.cleaned_data['phone']
-                elif form.cleaned_data['phone'] == None:
-                    username = form.cleaned_data['email']
-                # user = form.save(commit=False)
-                validated_data = form.cleaned_data
-                user = User(username=username, profile_pic=validated_data['profile_pic'], phone=validated_data['phone'], email=validated_data['email'],
-                            password=validated_data['password1'])
-                # user.is_active = False
+                user = form.save(commit=False)
+                user.is_active = False
 
-                user.save()
-                """path to view
-                    -getting domain we are on 
-                    -relative url to verification
-                    -encode uid
-                    -token 
-                      """
-                # uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-                #
-                # domain = get_current_site(request).domain
-                # link = reverse('activate', kwargs={
-                #     'uidb64': uidb64, 'token': token_genarator.make_token(user)}
-                #                )
-                # activate_url = 'http://' + domain + link
-                # email_body = 'Hi please use this link to verify your account\n\n' + activate_url
-                # email_subject = 'Activate your account'
-                # email = form.cleaned_data.get('email')
-                # email = EmailMessage(
-                #     email_subject, email_body, to=[email]
-                # )
-                # email.send()
-                # return HttpResponse('Please confirm your email address to complete the registration')
+                if form.cleaned_data['phone'] == None:
+                    user.username = form.cleaned_data['email']
+                    user.save()
+                    """path to view
+                                                            -getting domain we are on 
+                                                            -relative url to verification
+                                                            -encode uid
+                                                            -token 
+                                                              """
+                    uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+
+                    domain = get_current_site(request).domain
+                    link = reverse('activate', kwargs={
+                        'uidb64': uidb64, 'token': token_genarator.make_token(user)}
+                                   )
+                    activate_url = 'http://' + domain + link
+                    email_body = 'Hi please use this link to verify your account\n\n' + activate_url
+                    email_subject = 'Activate your account'
+                    email = form.cleaned_data.get('email')
+                    email = EmailMessage(
+                        email_subject, email_body, to=[email]
+                    )
+                    email.send()
+                    return HttpResponse('Please confirm your email address to complete the registration')
+
+                else:
+                    user.username = form.cleaned_data['phone']
+                    token = randint(100, 999)
+                    user.sms_verify = token
+                    user.save()
+                    sms = ghasedak.Ghasedak("")
+                    sms.send({'message': "Use " + str(token) + " to verify your account.",
+                              'receptor': form.cleaned_data['phone'],
+                              'linenumber': "10008566"})
+                    return redirect('sms', pk=user.id)
         else:
             form = RegisterUserForm()
-        return render(request, 'registration/register_user.html', {'form': form})
+            return render(request, 'registration/register_user.html', {'form': form})
+
+
+class SmsView(View):
+    def get(self, request, pk):
+        form = SmsForm()
+        return render(request, 'registration/smsverify.html', {'form': form})
+
+    def post(self, request, pk):
+        form = SmsForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(id=pk)
+            validated_data = form.cleaned_data
+            if validated_data['sms'] == user.sms_verify:
+                user.is_active = True
+                user.save()
+                return redirect('/')
 
 
 class VerificationView(View):
@@ -89,29 +112,34 @@ class VerificationView(View):
 class UserDetail(LoginRequiredMixin, View):
     def get(self, request, slug):
         posts = Post.objects.filter(user__slug=slug)
-        return render(request, 'user/user_profile.html', {'posts': posts})
+        user = User.objects.get(slug=slug)
+        flag = False
+        if user.id == request.user.id or FollowerFollowing.objects.filter(from_user=request.user, to_user=user,
+                                                                          accept=True):
+            flag = True
+        return render(request, 'user/user_profile.html', {'posts': posts, 'user': user, 'flag': flag})
 
 
-# # view for follow request
-# class UserFollow(LoginRequiredMixin, View):
-#     def get(self, request, pk):
-#         user = request.user
-#         user.friends.add(User.objects.get(id=pk))
-#         user_friends = User.objects.get(id=request.user.id).friends.all()
-#         user_except_you = User.objects.exclude(id=request.user.id)
-#         user_list = set(user_except_you) - set(user_friends)
-#         return render(request, 'user/user_list.html', {'user_list': user_list})
+# view for follow request
+class UserFollow(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        user = request.user
+        user.friends.add(User.objects.get(id=pk))
+        return redirect('friends_post')
 
 
 # view for  show following post in home
 class FriendsPost(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user
-        all_friends_posts = [Post.objects.filter(user=request.user)]
-        following = FollowerFollowing.objects.filter(from_user=user, accept=True)
-        for friend in following:
-            all_friends_posts.append(Post.objects.filter(user=friend.to_user).order_by('created'))
-        return render(request, 'post/home_post.html', {'all_friends_posts': all_friends_posts})
+        following_id = [request.user.id]
+        posts = []
+        for obj in FollowerFollowing.objects.filter(from_user=request.user, accept=True):
+            following_id.append(obj.to_user.id)
+        following = User.objects.filter(id__in=following_id)
+        for post in Post.objects.all():
+            if post.user in following:
+                posts.append(post)
+        return render(request, 'post/home_post.html', {'posts': posts})
 
 
 # view for show followings

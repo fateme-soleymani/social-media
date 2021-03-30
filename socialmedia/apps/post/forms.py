@@ -24,4 +24,11 @@ class CreatePostForm(ModelForm):
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
 
+# class UpdatePostForm(ModelForm):
+#     class Meta:
+#         model = Post
+#         fields = ['title', 'content', 'post_pic']
+#
+#     def clean(self):
+#         cleaned_data = super().clean()
 

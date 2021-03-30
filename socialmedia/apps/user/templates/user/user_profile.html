@@ -1,12 +1,40 @@
 {% extends 'base_profile.html' %}
+{% load custom_tags %}
 {% block main %}
+    <div>
+        <header class="small-profile">
+            {% if user.profile_pic %}
+                <img class="user-pic"
+                     src="{{ user.profile_pic.url }}">
+            {% else %}
+                <div class="default-pic"></div>
+            {% endif %}
+            <b>{{ user.username_media }}</b>
 
-    <ul>
-        {% for p in posts %}
-            <li><a href="{% url 'post_detail' p.id %}">{{ p.title }}</a></li>
+        </header>
+
+    </div>
+    {% if  flag %}
+        {% for post in posts %}
+            <div class="post-border">
+                <p class="title-post"><br>{{ post.title }}<br></p>
+                <a href="{% url 'post_detail' post.id %}">{% if post.post_pic %}
+                    <img class="image-post" src="{{ post.post_pic.url }}"><br>
+                {% endif %}
+                    <p class="post-cont">{{ post.content }}</p></a><br><br>
+
+
+                <button style="margin-right: 10px" class="btn_t"><a
+                        href="{% url 'post_detail' post.id %}"><i
+                        class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a></button>
+
+                <button class="btn_t"><a
+                        href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
+                </button>
+
+            </div>
         {% endfor %}
-    </ul>
-    <p>Number of posts: {{ posts | length }}</p>
-
-
-{% endblock %}
+        {% else %}
+        <a href="{% url 'user_follow' user.id %}">follow</a>
+    {% endif %}
+{% endblock main %}
