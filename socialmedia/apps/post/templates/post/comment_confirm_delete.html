@@ -1,7 +1,9 @@
 {% extends 'base_profile.html' %}
+{% load static %}
 {% block main %}
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+    <form method="post" class="flw_pic">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <button class="btn_blue" type="submit">Confirm</button>
+        <button class="btn_blue"><a href="{% url 'post_detail' Comment.post.id %}">Refuse</a></button>
+    </form>
 {% endblock %}

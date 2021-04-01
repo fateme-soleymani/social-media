@@ -22,7 +22,7 @@ from apps.user import views
 from apps.user.views import RegisterUser, LoginView
 
 urlpatterns = [
-    path('', LoginView.as_view(), name='login'),
+    path('', LoginView.as_view(), name='logiin'),
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),
     path('user/', include('apps.user.urls')),

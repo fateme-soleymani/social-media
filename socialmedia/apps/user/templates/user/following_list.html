@@ -1,7 +1,7 @@
 {% extends 'base_profile.html' %}
 {% block main %}
-    <h2>{{ following | length }}</h2>
+    <h2 class="flw_pic">{{ following | length }}</h2>
     {% for f in following %}
-        <li><a href="{% url 'user_detail' f.to_user.slug %}">{{ f.to_user.username_media }}</a></li>
+        <p class="flw_pic font_flw"><a href="{% url 'user_detail' f.to_user.slug %}">{{ f.to_user.username_media }}</a></p>
     {% endfor %}
 {% endblock %}

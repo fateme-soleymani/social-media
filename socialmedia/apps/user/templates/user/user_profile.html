@@ -2,14 +2,15 @@
 {% load custom_tags %}
 {% block main %}
     <div>
-        <header class="small-profile">
+        <header class="small-profile, flw_pic">
+
             {% if user.profile_pic %}
                 <img class="user-pic"
                      src="{{ user.profile_pic.url }}">
             {% else %}
                 <div class="default-pic"></div>
             {% endif %}
-            <b>{{ user.username_media }}</b>
+            <b style="margin-left: 25%;" class="font_flw">{{ user.username_media }}</b>
 
         </header>
 
@@ -24,17 +25,18 @@
                     <p class="post-cont">{{ post.content }}</p></a><br><br>
 
 
-                <button style="margin-right: 10px" class="btn_t"><a
+                <button style="margin-right: 10px" class="btn_blue"><a
                         href="{% url 'post_detail' post.id %}"><i
                         class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a></button>
 
-                <button class="btn_t"><a
+                <button class="btn_blue"><a
                         href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
                 </button>
 
             </div>
         {% endfor %}
-        {% else %}
-        <a href="{% url 'user_follow' user.id %}">follow</a>
+    {% else %}
+
+        <button class="btn_blue flw_pic"><a href="{% url 'user_follow' user.id %}">follow</a></button>
     {% endif %}
 {% endblock main %}

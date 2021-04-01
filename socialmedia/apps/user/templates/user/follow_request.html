@@ -1,8 +1,12 @@
 {% extends 'base_profile.html' %}
 {% block main %}
-    {% for f in follow_request %}
-        <li>{{ f.from_user.username_media }}</li>
-        <button><a href="{% url 'accept' f.from_user.id %}">Accept</a></button>
-        <button><a href="{% url 'delete'  f.from_user.id %}">Delete</a></button>
-    {% endfor %}
+    {% if follow_request != 0 %}
+        {% for f in follow_request %}
+            <span class="font_flw flw_pic">{{ f.from_user.username_media | title }}</span>
+            <button class="btn_blue"><a href="{% url 'accept' f.from_user.id %}">Accept</a></button>
+            <button class="btn_blue"><a href="{% url 'delete'  f.from_user.id %}">Delete</a></button><br><br>
+        {% endfor %}
+    {% else %}
+        <p class="flw_pic font_flw">There is no new follow requests for you!</p>
+    {% endif %}
 {% endblock %}

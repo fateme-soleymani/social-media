@@ -63,13 +63,14 @@ def p_age(time):
                     return '{} hours ago'.format(hour)
 
         elif month > 0:
-            return '{} months ago'.format(month)
-
-
+            if month == 1:
+                day = day + 31
+                return '{} days ago'.format(day)
+            else:
+                return '{} months ago'.format(month)
 
 
 @register.inclusion_tag('post/content.html')
 def comment_post(post_id):
     my_comment = Comment.objects.filter(post=post_id)
     return {'my_comment': my_comment}
-

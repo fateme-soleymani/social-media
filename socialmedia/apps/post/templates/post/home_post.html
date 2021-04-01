@@ -19,13 +19,11 @@
                     <img class="image-post" src="{{ post.post_pic.url }}"><br>
                 {% endif %}
                     <p class="post-cont">{{ post.content }}</p></a><br><br>
-
-
-                <button style="margin-right: 10px" class="btn_t"><a
+                <button style="margin-right: 10px" class="btn_blue"><a
                         href="{% url 'post_detail' post.id %}"><i
                         class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a></button>
 
-                <button class="btn_t"><a
+                <button class="btn_blue"><a
                         href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
                 </button>
 

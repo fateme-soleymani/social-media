@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base_profile.html' %}
+{% load custom_tags %}
+{% load static %}
+{% block main %}
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update">
+    <div class="container flw_pic">
+
+            <label><b>Tile</b></label><br>
+            {{ form.title}}<br>
+            <label><b>Content</b></label><br>
+            {{ form.content }}<br>
+            <label><b>Post Picture</b></label><br>
+            {{ form.post_pic }}<br>
+            <button type="submit" class="btn_blue">Update</button>
+
+
+        </div>
 </form>
-</body>
-</html>
+{% endblock main %}

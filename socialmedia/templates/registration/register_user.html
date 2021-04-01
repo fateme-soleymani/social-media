@@ -1,31 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        .btn_t {
-            background-color: DodgerBlue;
-            border: none;
-            color: white;
-            padding: 12px 16px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
     <title>Register</title>
 </head>
 <body>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-{#    <p>Email: {{ form.email }}</p>#}
-{#    <p>Name: {{ form.first_name }}</p>#}
-{#    <p>Surname: {{ form.last_name }}</p>#}
-{#    <p>Gender: {{ form.gender }}</p>#}
-{#    <p>Password: {{ form.password1 }}</p>#}
-{#    <p>Password Confirmation: {{ form.password2 }}</p>#}
-{#    <p>{{ form.error_messages }}</p>#}
-    {{ form.as_p }}
-    <input class="btn_t" type="submit" value="Save">
+    <p class="error">{{ message }}</p>
+    <div class="container">
+        <label for="uname"><b>Username</b></label>
+        {{ form.username_media }}<br>
+        <label for="email"><b>Email</b></label>
+        {{ form.email }}<br>
+        <label for="phone"><b>Phone Number</b></label>
+        {{ form.phone }}<br>
+        <label for="psw1"><b>Password</b></label>
+        {{ form.password1 }}<br>
+        <label for="psw2"><b>Re-Password</b></label>
+        {{ form.password2 }}<br>
+        <button type="submit">SignUp</button>
+        Already have an account?<a href="{% url 'logiin' %}">Login</a>
+
+    </div>
 </form>
 </body>
 </html>

@@ -1,13 +1,38 @@
 {% extends 'base_profile.html' %}
 {% load custom_tags %}
+{% load static %}
 {% block main %}
+    {#    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">#}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <table>
-            <tr>{{ form.as_table }}</tr>
-        </table>
-        <br>
-        <tr><input class="btn_t" type="submit" value="Update"></tr>
+        {#        <table>#}
+        {#            <tr>{{ form.as_table }}</tr>#}
+        {#        </table>#}
+        {#        <br>#}
+        {#                <tr><input class="btn_blue" type="submit" value="Update"></tr>#}
+        <div class="container flw_pic">
+
+            <label><b>First Name</b></label><br>
+            {{ form.first_name }}<br>
+            <label><b>Last Name</b></label><br>
+            {{ form.last_name }}<br>
+            <label><b>Date Of Birth</b></label><br>
+            {{ form.date_of_birth }}<br>
+            <label><b>Gender</b></label><br>
+            {{ form.gender }}<br>
+            <label><b>Email</b></label><br>
+            {{ form.email }}<br>
+            <label><b>Link</b></label><br>
+            {{ form.link }}<br>
+            <label><b>Bio</b></label><br>
+            {{ form.bio }}<br>
+            <label><b>Profile Picture</b></label><br>
+            {{ form.profile_pic }}<br>
+            <button type="submit" class="btn_blue">Update</button>
+            <br><br>
+            <a href="{% url 'change_password' %}"><b>Do you want to change your password?</b></a>
+
+        </div>
     </form>
-    <a href="{% url 'change_password' %}">Do you want to change your password?</a>
+
 {% endblock main %}

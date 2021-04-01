@@ -5,6 +5,7 @@
     <title>{% block title %}Home{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
 </head>
 <body>
 {% include 'post/message.html' %}
@@ -30,7 +31,7 @@
         <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Search.." title="Type in a category">
         <ul id="myMenu">
             {% for i in request.user.all_user %}
-                <li><a href="{% url 'user_detail' i.slug %}">{{ i.username_media }}</a></li>
+                <li><b><a href="{% url 'user_detail' i.slug %}">{{ i.username_media }}</a></b></li>
             {% endfor %}
         </ul>
 

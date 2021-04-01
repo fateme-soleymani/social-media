@@ -66,7 +66,7 @@ class RegisterUser(CreateView):
                     token = randint(100, 999)
                     user.sms_verify = token
                     user.save()
-                    sms = ghasedak.Ghasedak("")
+                    sms = ghasedak.Ghasedak("3ff27321df3f864cb05a863ef32b41687ba63889cc6f0d075d894e103430dc64")
                     sms.send({'message': "Use " + str(token) + " to verify your account.",
                               'receptor': form.cleaned_data['phone'],
                               'linenumber': "10008566"})
@@ -90,7 +90,9 @@ class SmsView(View):
                 user.is_active = True
                 user.save()
                 return redirect('/')
-
+            else:
+                message = 'The code you enter is incorrect!'
+                return render(request, 'registration/smsverify.html', {'form': form, 'message': message})
 
 class VerificationView(View):
     def get(self, request, uidb64, token):
@@ -172,6 +174,9 @@ class FollowRequest(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
         follow_request = FollowerFollowing.objects.filter(to_user=user, accept=False)
+        follow_request_list = list(follow_request)
+        if len(follow_request_list) == 0:
+            follow_request = 0
         return render(request, 'user/follow_request.html', {'follow_request': follow_request})
 
 

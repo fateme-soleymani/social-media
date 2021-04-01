@@ -1,7 +1,7 @@
 {% extends 'base_profile.html' %}
 {% block main %}
-    <h2>{{ follower | length }}</h2>
+    <h2 class="flw_pic">{{ follower | length }}</h2>
     {% for f in follower %}
-        <li>{{ f.from_user.username_media }}</li>
+        <p class="flw_pic font_flw">{{ f.from_user.username_media }}</p>
     {% endfor %}
 {% endblock %}

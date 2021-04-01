@@ -2,29 +2,43 @@
 {% load custom_tags %}
 {% block main %}
     <ul>
-        <li><b>{{ post.user | title }}</b> {% p_age post.created %}</li>
+
+        <li>
+            {% if post.user.profile_pic %}
+                <img class="user-pic-cm"
+                     src="{{ post.user.profile_pic.url }}">
+            {% else %}
+                <div class="default-pic"></div>
+            {% endif %}
+            <b>{{ post.user | title }}</b> {% p_age post.created %}
+            {% if post.user == request.user %}
+                <button class="btn_blue flw_pic"><i class="fa fa-edit"></i><a href="{% url 'edit_post' post.id %}">Edit
+                    Post</a></button>
+                <button class="btn_blue"><i class="fa fa-trash"></i><a href="{% url 'delete_post' post.id %}">Delete
+                    Post</a></button>
+            {% endif %}
+        </li>
         <li><h2>{{ post.content }}</h2></li>
         {% if post.post_pic %}
             <img src="{{ post.post_pic.url }}" style="width: 120px; height: 120px">
         {% endif %}
 
     </ul>
-{#    <button class="btn_t"><i class="fa fa-comment"></i></button>#}
-{#    <button class="btn_t"><i class="fa fa-heart"></i>{{ post.like.all | length }}</button>#}
-
     <ul>
 
         {% for comment in my_comment %}
-            <li>{{ comment.user.email }}  {{ comment.text }}</li>
+            <span><b>{{ comment.user.username_media }}</b> : {{ comment.text }}</span>
             {% if comment.post.user == request.user %}
-                <button class="btn_t"><i class="fa fa-trash"></i><a href="{% url 'delete_cm' comment.id %}">Delete</a>
+                <button class="btn_blue"><i class="fa fa-trash"></i><a
+                        href="{% url 'delete_cm' comment.id %}">Delete</a>
                 </button>
             {% endif %}
+            <br>
         {% endfor %}
     </ul>
 
 
-    <form action="" method="post">
+    <form action="" method="post" class="flw_pic">
         {% csrf_token %}
         <table>
             <tr>{{ form.as_table }}</tr>
@@ -32,12 +46,9 @@
         <br>
         <tr>
 
-            <td><input class="btn_t" type="submit" VALUE="Send"></td>
+            <td><input class="btn_blue" type="submit" VALUE="Send"></td>
         </tr>
     </form>
     <br>
-    {% if post.user == request.user %}
-        <button class="btn_t"><i class="fa fa-edit"></i><a href="{% url 'edit_post' post.id %}">Edit</a></button>
-        <button class="btn_t"><i class="fa fa-trash"></i><a href="{% url 'delete_post' post.id %}">Delete</a></button>
-    {% endif %}
+
 {% endblock main %}
