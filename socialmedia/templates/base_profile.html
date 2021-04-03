@@ -18,7 +18,7 @@
             <a href="{% url 'friends_post' %}"><i class="fa fa-home"></i>Home</a>
             <a href="{% url 'create_post' %}"><i class="fa fa-plus-square"></i>Create post</a>
             <a href="{% url 'followers' %}"><i class="fa fa-user"></i>Followers {% followers_len request.user %}</a>
-            <a href="{% url 'following' %}"><i class="fa fa-users"></i>Followings {{ request.user.friends.all | length }}</a>
+            <a href="{% url 'following' %}"><i class="fa fa-users"></i>Followings {% following_len request.user %}</a>
             <a href="{% url 'follow_requests' %}"><i class="fa fa-user-plus"></i>Follow Requests {% follow_req_len request.user %}</a>
             <a class="active" href="{% url 'edit_user' request.user.id %}"><i class="fa fa-edit"></i>Edit Info</a>
             <a class="active" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Logout</a>

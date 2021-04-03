@@ -13,7 +13,7 @@
         </header>
         <ul style="justify-content: space-around; display: flex">
             <li>Followers : {% followers_len user %}</li>
-            <li>Followings : {{ user.friends.all | length }}</li>
+            <li>Followings : {% following_len request.user %}</li>
             <li>Posts : {{ posts | length }}</li>
         </ul>
     </div>
