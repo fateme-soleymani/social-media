@@ -2,6 +2,7 @@ from django import template
 from django.utils.timezone import now
 
 from apps.post.models import Comment
+from apps.user.models import FollowerFollowing
 
 register = template.Library()
 
@@ -74,3 +75,13 @@ def p_age(time):
 def comment_post(post_id):
     my_comment = Comment.objects.filter(post=post_id)
     return {'my_comment': my_comment}
+
+@register.simple_tag(name='followers_len')
+def length_follower(user):
+    follower = FollowerFollowing.objects.filter(to_user=user, accept=True)
+    return len(follower)
+
+@register.simple_tag(name='follow_req_len')
+def length_flw_req(user):
+    flw_req = FollowerFollowing.objects.filter(to_user_id=user, accept=False)
+    return len(flw_req)

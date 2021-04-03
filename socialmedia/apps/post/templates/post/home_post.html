@@ -1,32 +1,34 @@
 {% extends 'base_profile.html' %}
 {% load custom_tags %}
 {% block main %}
-{% for post in posts %}
-            <div class="post-border">
-                <header class="small-profile">
-                    {% if post.user.profile_pic %}
-                        <img class="user-pic"
-                             src="{{ post.user.profile_pic.url }}">
-                    {% else %}
-                        <div class="default-pic"></div>
-                    {% endif %}
-                    <div><a href="{% url 'user_detail' post.user.slug %}"><b>{{ post.user.username_media }}</b></a>
-                        <br>{% p_age post.created %}</div>
-                </header>
-
-                <p class="title-post"><br>{{ post.title }}<br></p>
-                <a href="{% url 'post_detail' post.id %}">{% if post.post_pic %}
-                    <img class="image-post" src="{{ post.post_pic.url }}"><br>
+    {% for post in posts %}
+        <div class="post-border">
+            <header class="small-profile">
+                {% if post.user.profile_pic %}
+                    <img class="user-pic"
+                         src="{{ post.user.profile_pic.url }}">
+                {% else %}
+                    <div class="default-pic"></div>
                 {% endif %}
-                    <p class="post-cont">{{ post.content }}</p></a><br><br>
-                <button style="margin-right: 10px" class="btn_blue"><a
-                        href="{% url 'post_detail' post.id %}"><i
-                        class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a></button>
+                <div><a href="{% url 'user_detail' post.user.slug %}"><b>{{ post.user.username_media }}</b></a>
+                    <br>{% p_age post.created %}</div>
+            </header>
 
-                <button class="btn_blue"><a
-                        href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
-                </button>
+            <p class="title-post"><br>{{ post.title }}<br></p>
+            <a href="{% url 'post_detail' post.id %}">{% if post.post_pic %}
+                <img class="image-post" src="{{ post.post_pic.url }}"><br>
+            {% endif %}
+                <p class="post-cont">{{ post.content }}</p></a><br><br>
+            <button style="margin-right: 10px" class="btn_blue"><a
+                    href="{% url 'post_detail' post.id %}"><i
+                    class="fa fa-comment"></i>{{ post.comment_set.all | length }}</a></button>
 
-            </div>
-        {% endfor %}
+            <button class="btn_blue"><a
+                    href="{% url 'like' post.id %}"><i class="fa fa-heart"></i>{{ post.like.all | length }}</a>
+            </button><br><br>
+            {% for i in post.comment_set.all %}
+                <b>{{ i.user.username_media }}</b>:{{ i.text }}<br>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock main %}

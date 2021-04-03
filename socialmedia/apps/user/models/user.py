@@ -7,6 +7,8 @@ from apps.user.managers import UserManager
 
 import os
 
+from apps.user.validator import mobile_validator, mobile_length_validator
+
 
 def get_upload_path(instance, filename):
     return os.path.join(f'user/{instance.id}', filename)
@@ -19,7 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     email = models.EmailField("email address", unique=True, blank=True, null=True)
-    phone = models.CharField("mobile number", max_length=11, unique=True, null=True, blank=True)
+    phone = models.CharField("mobile number", max_length=11, unique=True, null=True, blank=True, validators=[mobile_validator, mobile_length_validator])
     friends = models.ManyToManyField('User', through='FollowerFollowing')
     link = models.URLField('link', max_length=200, blank=True)
     bio = models.TextField('bio', blank=True)

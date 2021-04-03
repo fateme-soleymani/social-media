@@ -1,6 +1,5 @@
 {% extends 'base_profile.html' %}
 {% block main %}
-    <h2 class="flw_pic">{{ follower | length }}</h2>
     {% for f in follower %}
         <p class="flw_pic font_flw">{{ f.from_user.username_media }}</p>
     {% endfor %}

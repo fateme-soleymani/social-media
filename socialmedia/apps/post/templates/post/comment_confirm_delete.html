@@ -4,6 +4,6 @@
     <form method="post" class="flw_pic">{% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
         <button class="btn_blue" type="submit">Confirm</button>
-        <button class="btn_blue"><a href="{% url 'post_detail' Comment.post.id %}">Refuse</a></button>
+        <button class="btn_blue"><a style="color: white" href="{% url 'post_detail' comment.post.id %}">Refuse</a></button>
     </form>
-{% endblock %}
+{% endblock main %}

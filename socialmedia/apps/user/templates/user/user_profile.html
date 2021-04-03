@@ -2,19 +2,22 @@
 {% load custom_tags %}
 {% block main %}
     <div>
-        <header class="small-profile, flw_pic">
-
+        <header class="small-profile flw_pic">
             {% if user.profile_pic %}
                 <img class="user-pic"
                      src="{{ user.profile_pic.url }}">
             {% else %}
                 <div class="default-pic"></div>
             {% endif %}
-            <b style="margin-left: 25%;" class="font_flw">{{ user.username_media }}</b>
-
+            <div><a href="{% url 'user_detail' user.slug %}"><b>{{ user.username_media }}</b></a></div>
         </header>
-
+        <ul style="justify-content: space-around; display: flex">
+            <li>Followers : {% followers_len user %}</li>
+            <li>Followings : {{ user.friends.all | length }}</li>
+            <li>Posts : {{ posts | length }}</li>
+        </ul>
     </div>
+
     {% if  flag %}
         {% for post in posts %}
             <div class="post-border">

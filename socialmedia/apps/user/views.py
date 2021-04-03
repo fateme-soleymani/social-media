@@ -66,11 +66,14 @@ class RegisterUser(CreateView):
                     token = randint(100, 999)
                     user.sms_verify = token
                     user.save()
-                    sms = ghasedak.Ghasedak("3ff27321df3f864cb05a863ef32b41687ba63889cc6f0d075d894e103430dc64")
+
                     sms.send({'message': "Use " + str(token) + " to verify your account.",
                               'receptor': form.cleaned_data['phone'],
                               'linenumber': "10008566"})
                     return redirect('sms', pk=user.id)
+            else:
+                message = 'You must enter a valid email or phone number!'
+                return render(request, 'registration/register_user.html', {'form': form, 'message': message})
         else:
             form = RegisterUserForm()
             return render(request, 'registration/register_user.html', {'form': form})
@@ -164,7 +167,8 @@ class Follower(LoginRequiredMixin, View):
 class UpdateUser(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
     template_name = 'user/edit_user.html'
-    fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'link', 'bio', 'profile_pic']
+    fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'email', 'phone', 'link', 'bio', 'profile_pic']
+
     success_message = 'Your information has been updated'
     success_url = '/user/'
 
