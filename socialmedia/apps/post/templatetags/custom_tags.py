@@ -71,11 +71,6 @@ def p_age(time):
                 return '{} months ago'.format(month)
 
 
-@register.inclusion_tag('post/content.html')
-def comment_post(post_id):
-    my_comment = Comment.objects.filter(post=post_id)
-    return {'my_comment': my_comment}
-
 
 @register.simple_tag(name='followers_len')
 def length_follower(user):

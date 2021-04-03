@@ -16,6 +16,7 @@
             <li>Followings : {% following_len request.user %}</li>
             <li>Posts : {{ posts | length }}</li>
         </ul>
+        <br><span style="margin-left: 32px">{{ user.bio }}</span>
     </div>
 
     {% if  flag %}

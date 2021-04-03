@@ -22,20 +22,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(blank=True, null=True)
     email = models.EmailField("email address", unique=True, blank=True, null=True)
     phone = models.CharField("mobile number", max_length=11, unique=True, null=True, blank=True, validators=[mobile_validator, mobile_length_validator])
+
     friends = models.ManyToManyField('User', through='FollowerFollowing')
+
     link = models.URLField('link', max_length=200, blank=True)
     bio = models.TextField('bio', blank=True)
     gender = models.CharField(choices=(('F', 'Female'), ('M', 'Male')), default='d', max_length=1)
     slug = AutoSlugField(populate_from=['username_media'], unique=True, )
+
     profile_pic = models.ImageField(default='default_prof.png', upload_to=get_upload_path, null=True, blank=True)
+
     sms_verify = models.CharField(max_length=3)
+
+
     is_active = models.BooleanField('active', default=True)
     is_superuser = models.BooleanField('superuser', default=False)
     is_staff = models.BooleanField('staff', default=False)
-
     objects = UserManager()
-
     USERNAME_FIELD = 'username'
+
     REQUIRED_FIELDS = []
 
     class Meta:
@@ -62,7 +67,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     def all_user(self):
         return User.objects.exclude(id=self.id)
 
-    # @property
-    # def follower(self):
-    #
-    # FollowerFollowing.objects.filter(to_user=user, accept=True)

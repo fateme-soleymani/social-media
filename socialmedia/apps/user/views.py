@@ -66,7 +66,7 @@ class RegisterUser(CreateView):
                     token = randint(100, 999)
                     user.sms_verify = token
                     user.save()
-
+                    sms = ghasedak.Ghasedak("")
                     sms.send({'message': "Use " + str(token) + " to verify your account.",
                               'receptor': form.cleaned_data['phone'],
                               'linenumber': "10008566"})
